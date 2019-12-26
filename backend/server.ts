@@ -3,6 +3,8 @@ import path from 'path';
 import hbs from 'hbs';
 import connection from './dbconnection';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
+import email from './sendEmail';
 
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
@@ -67,7 +69,8 @@ server.post('/students/registration', (req, res) => {
             res.redirect(`/students/signup?queryy=${string}`); 
         } else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
-                res.send(req.body);
+                const token = jwt.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
+                email.sendConfirmMessage(req.body.email, req.body.name);
             }
             else {
                 let pin: string = '', phone: string = '', email: string = '', query: string = '';

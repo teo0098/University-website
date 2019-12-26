@@ -8,6 +8,8 @@ var path_1 = __importDefault(require("path"));
 var hbs_1 = __importDefault(require("hbs"));
 var dbconnection_1 = __importDefault(require("./dbconnection"));
 var body_parser_1 = __importDefault(require("body-parser"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var sendEmail_1 = __importDefault(require("./sendEmail"));
 var errorMessage = null;
 var majors = [];
 dbconnection_1.default.connect(function (error) {
@@ -64,10 +66,11 @@ server.post('/students/registration', function (req, res) {
         }
         else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
-                res.send(req.body);
+                var token = jsonwebtoken_1.default.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
+                sendEmail_1.default.sendConfirmMessage(req.body.email, req.body.name);
             }
             else {
-                var pin = '', phone = '', email = '', query = '';
+                var pin = '', phone = '', email_1 = '', query = '';
                 if (result[0].length > 0) {
                     query = encodeURIComponent(' ');
                     pin = encodeURIComponent('This personal identity number already exists in the database\n');
@@ -78,9 +81,9 @@ server.post('/students/registration', function (req, res) {
                 }
                 if (result[2].length > 0) {
                     query = encodeURIComponent(' ');
-                    email = encodeURIComponent('This email already exists in the database');
+                    email_1 = encodeURIComponent('This email already exists in the database');
                 }
-                res.redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email);
+                res.redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email_1);
             }
         }
     });
