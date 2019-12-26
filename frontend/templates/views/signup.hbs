@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="/img/students-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/signup.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&display=swap" rel="stylesheet">
+    <title>Sign up</title>
+    <script src="https://kit.fontawesome.com/aa9fb73e01.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="signup">
+        {{>menu}}
+        <div class="signup__section">
+            <form class="signup__form" action="/students/registration" method="POST">
+                {{#if query}}
+                    <i class="fas fa-exclamation-triangle signup__errorIcon"></i>
+                    <h2 class="signup__errorName">{{query}}</h2>
+                    <h2 class="signup__errorName">{{pin}}</h2>
+                    <h2 class="signup__errorName">{{phone}}</h2>
+                    <h2 class="signup__errorName">{{email}}</h2>
+                {{/if}}
+                <div class="signup__div">
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Name:</h4>
+                        <input type="text" name="name" id="name" class="signup__input">
+                        <span class="signup__error signup__name">Name must consist of only letters and 
+                            spaces and there must be from 2 up to 20 characters</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Last name:</h4>
+                        <input type="text" name="lastname" id="lastname" class="signup__input">
+                        <span class="signup__error signup__lastname">Last name must consist of only 
+                            letters and spaces and there must be from 2 up to 30 characters</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Sex:</h4>
+                        <label class="signup__label" for="male">Male</label>
+                        <input type="radio" name="sex" id="male" value="M">
+                        <label class="signup__label" for="female">Female</label>
+                        <input type="radio" name="sex" id="female" value="W" checked>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Password:</h4>
+                        <input type="password" name="password" id="password" class="signup__input">
+                        <span class="signup__error signup__password">From 8 up to 30 characters. 
+                            Allowed characters: letters, numbers, @#!$*-_^&<strong>.</strong>,</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Repeat password:</h4>
+                        <input type="password" id="repeatPass" class="signup__input">
+                        <span class="signup__error signup__repeatPass">Passwords must be the same</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Personal identity number:</h4>
+                        <input type="text" name="pin" id="pin" class="signup__input">
+                        <span class="signup__error signup__pin">The number must consist of 11 digits</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Birth date:</h4>
+                        <input type="date" name="birthdate" class="signup__input" value="{{year}}-01-01"
+                         max="{{maxYear}}-12-31" min="{{minYear}}-01-01" required>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Phone number:</h4>
+                        <input type="tel" name="phone" id="phone" class="signup__input">
+                        <span class="signup__error signup__phone">The number must consist of digits from 9 up to 30 
+                            without any prefixes like +222 etc. Just only digits</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Email:</h4>
+                        <input type="email" name="email" id="email" class="signup__input">
+                        <span class="signup__error signup__email">Invalid email</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Zip code:</h4>
+                        <input type="text" name="zipcode" id="zipcode" class="signup__input">
+                        <span class="signup__error signup__zipcode">Zip code must be written in the 
+                            following format 11-111 where for each side you can assign from 2 up to 5 digits</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Place:</h4>
+                        <input type="text" name="location" id="place" class="signup__input">
+                        <span class="signup__error signup__place">Place must consist of only letters 
+                            and spaces and there must be from 3 up to 30 characters</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Apartment number:</h4>
+                        <input type="text" name="apartment" id="apartment" class="signup__input">
+                        <span class="signup__error signup__apartment">Apartment number must consist of letters or digits 
+                             and character / is allowed and there must be from 1 up to 10 digits or letters</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Street: (if countryside enter place)</h4>
+                        <input type="text" name="street" id="street" class="signup__input">
+                        <span class="signup__error signup__street">Street must consist of only letters 
+                            and spaces and there must be from 3 up to 30 characters</span>
+                    </section>
+                    <section class="signup__data">
+                        <h4 class="signup__h4">Major:</h4>
+                        <select name="major" class="signup__input">
+                            {{#each majors as |major|}}
+                                <option class="signup__option" value="{{major}}">{{major}}</option>
+                            {{/each}}
+                        </select>
+                    </section>
+                </div>
+                {{#if errorMessage}}
+                    <i class="fas fa-exclamation-triangle signup__errorIcon"></i>
+                    <h2 class="signup__errorName">Unable to connect to the database, please try again later</h2>
+                {{else}}
+                    <button class="signup__btn">Sign up</button>
+                {{/if}}
+            </form>
+        </div>
+    </div>
+    <script src="/src/signup.js"></script>
+</body>
+</html>

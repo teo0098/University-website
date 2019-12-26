@@ -1,0 +1,68 @@
+.join {
+  padding: 10vh;
+  background: #f7f2f2;
+  display: flex;
+  justify-content: center;
+}
+
+.join__h2 {
+  font-size: 2vw;
+  color: #3f173f;
+}
+
+.join__a {
+  text-decoration: none;
+  background: #3f173f;
+  padding: 1vh;
+  border-radius: 0.2vw;
+  font-size: 2.5vw;
+  color: #f1f1f1;
+  letter-spacing: 0.2vw;
+}
+
+.join__ninja {
+  font-size: 3vw;
+  color: #3f173f;
+  margin: 0 1vw;
+}
+
+.joinRes {
+  padding: 6vh;
+  background: #f7f2f2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: none;
+}
+
+.joinRes__a {
+  text-decoration: none;
+  background: #3f173f;
+  padding: 1vh;
+  border-radius: 0.5vw;
+  font-size: 6vw;
+  color: #f1f1f1;
+  letter-spacing: 0.2vw;
+}
+
+.joinRes__h2 {
+  text-align: center;
+  font-size: 4vw;
+  margin: 3vh 0;
+}
+
+.joinRes__ninja {
+  font-size: 8vw;
+}
+
+@media (max-width: 800px) {
+  .join {
+    display: none;
+  }
+
+  .joinRes {
+    display: flex;
+  }
+}
+
+/*# sourceMappingURL=index_join.css.map */

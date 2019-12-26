@@ -1,0 +1,77 @@
+@import '../_partial1';
+
+@mixin font($size, $colour) {
+    font-size: $size;
+    color: $colour;
+}
+
+.academyI {
+    width: 100%;
+    min-height: 50vh;
+    background: $color;
+    padding: 5vh;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-between;
+}
+
+.academyI__error {
+    width: inherit;
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.academyI__errorIcon {
+    @include font(10vw, $color3);
+    margin: 5vh 0;
+}
+
+.academyI__errorName {
+    @include font(2vw, $color6);
+}
+
+.academyI__major {
+    width: 30%;
+    text-align: center;
+    margin: 2vh 0;
+    padding: 1vh;
+}
+
+.academyI__majorIcon {
+    @include font(3vw, $color7);
+}
+
+.academyI__majorName {
+    @include font(1.5vw, $color6);
+}
+
+@media (max-width: 800px) {
+    .academyI {
+        flex-wrap: nowrap;
+        align-content: unset;
+        flex-direction: column;
+    }
+
+    .academyI__errorIcon {
+        font-size: 15vw;
+    }
+
+    .academyI__errorName {
+        font-size: 4vw;
+    }
+
+    .academyI__major {
+        width: 100%;
+    }
+
+    .academyI__majorIcon {
+        font-size: 6vw;
+    }
+
+    .academyI__majorName {
+        font-size: 4vw;
+    }
+}

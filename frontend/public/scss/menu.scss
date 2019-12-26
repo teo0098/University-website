@@ -1,0 +1,153 @@
+@import '_partial1';
+
+@mixin el($size1, $size2) {
+    margin: $size1;
+    font-size: $size2;
+}
+
+.menu {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: $color;
+    padding: 3vh;
+}
+
+.menu__logo {
+   width: 20vw;
+}
+
+.menu__logo_a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding: 1vh;
+}
+
+.menu__items {
+    width: 60vw;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.menu__h2, .menu__i--logo {
+    @include el(0 0.5vw, 2vw);
+}
+
+.menu__h2, .menu__h3 {
+    letter-spacing: 0.2vw;
+}
+
+.menu__ul {
+    list-style-type: none;
+    display: flex;
+}
+
+.menu__li {
+    @include el(0 1vw, 1.2vw);
+    height: 100%;
+}
+
+.menu__liContainer {
+    padding: 2.2vh;
+    display: flex;
+    color: inherit;
+    text-decoration: none;
+}
+
+.menu__zone {
+    background-color: $color;
+    color: $color6;
+    border-radius: 0.5vh;
+}
+
+.menu__span {
+    letter-spacing: 0.05vw;
+    margin: 0 0.5vw;
+}
+
+.menu__container {
+    display: none;
+    margin-right: 0;
+    margin-left: auto;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu__h3, .menu__i--logo-2 {
+    @include el(0 0.5vw, 3vw);
+    color: rgb(179, 179, 179);
+}
+
+@media (max-width: 800px) {
+    .menu {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .menu__logo {
+        width: 100%;
+        display: flex;
+        background: $color2;
+    }
+
+    .menu__h2 {
+        letter-spacing: 0.5vw;
+    }
+
+    .menu__h2, .menu__i--logo {
+        font-size: 4vw;
+    }
+
+    .menu__container {
+        display: flex;
+        padding: 3vh;
+    }
+
+    .menu__items {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0 3vh;
+        background: $color2;
+        opacity: 0;
+        pointer-events: none;
+        height: 0;
+    }
+
+    .menu__items--showed {
+        opacity: 1;
+        transition: all 400ms ease-out;
+        pointer-events: auto;
+        height: auto;
+    }
+
+    .menu__ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .menu__li {
+        @include el(1vh 0, 3vw);
+        opacity: 0;
+    }
+
+    .menu__li--showed {
+        opacity: 1;
+        transition: all 200ms ease-out;
+    }
+
+    @for $i from 1 through 3 {
+        .menu__li--showed-#{$i} {
+            transition-delay: 400ms * $i;
+        }
+    }
+
+    .menu__span {
+        margin: 0 1vw;
+    }
+
+    .menu__logo_a {
+        padding: 3vh;
+    }
+}

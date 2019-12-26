@@ -1,0 +1,100 @@
+@import '../partial1';
+@import '../menu';
+@import '../styles';
+@import 'index_majors';
+@import 'index_join';
+
+.intro {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url('../../img/students-intro.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.intro__heading {
+    display: flex;
+    padding: 15vh;
+}
+
+.intro__div {
+    display: flex;
+    flex-direction: column;
+    color: $color;
+    padding: 5vh;
+    background-color: $color4;
+    min-width: 30vw;
+}
+
+.intro__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.intro__h1 {
+    font-size: 4vw;
+    letter-spacing: 0.3vw;
+    transform: skew(-10deg,0);
+    margin-bottom: 3vh;
+}
+
+.intro__word {
+    display: flex;
+    align-items: center;
+    border: 0.2vw solid $color;
+    padding: 2vh;
+}
+
+.intro__h4 {
+    font-size: 3vw;
+    letter-spacing: 0.1vw;
+}
+
+.intro__span {
+    font-weight: 100;
+    font-size: 5vw;
+    animation: flash 1000ms infinite step-end;
+}
+
+@keyframes flash {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 800px) {
+    .intro__div {
+        width: 90%;
+    }
+
+    .intro__container {
+        flex-direction: row;
+    }
+
+    .intro__heading {
+        justify-content: center;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .intro__h1--with {
+        margin: 0 2vw;
+    }
+
+    .intro__h1 {
+        font-size: 6vw;
+    }
+
+    .intro__h4 {
+        font-size: 5vw;
+    }
+
+    .intro__span {
+        font-size: 7vw;
+    }
+}

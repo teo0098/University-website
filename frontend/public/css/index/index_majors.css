@@ -1,0 +1,76 @@
+.academyI {
+  width: 100%;
+  min-height: 50vh;
+  background: #f7f2f2;
+  padding: 5vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-between;
+}
+
+.academyI__error {
+  width: inherit;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.academyI__errorIcon {
+  font-size: 10vw;
+  color: crimson;
+  margin: 5vh 0;
+}
+
+.academyI__errorName {
+  font-size: 2vw;
+  color: #3f173f;
+}
+
+.academyI__major {
+  width: 30%;
+  text-align: center;
+  margin: 2vh 0;
+  padding: 1vh;
+}
+
+.academyI__majorIcon {
+  font-size: 3vw;
+  color: #FF7F50;
+}
+
+.academyI__majorName {
+  font-size: 1.5vw;
+  color: #3f173f;
+}
+
+@media (max-width: 800px) {
+  .academyI {
+    flex-wrap: nowrap;
+    align-content: unset;
+    flex-direction: column;
+  }
+
+  .academyI__errorIcon {
+    font-size: 15vw;
+  }
+
+  .academyI__errorName {
+    font-size: 4vw;
+  }
+
+  .academyI__major {
+    width: 100%;
+  }
+
+  .academyI__majorIcon {
+    font-size: 6vw;
+  }
+
+  .academyI__majorName {
+    font-size: 4vw;
+  }
+}
+
+/*# sourceMappingURL=index_majors.css.map */

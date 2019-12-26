@@ -1,0 +1,51 @@
+@import '_partial1';
+@import 'menu';
+
+@mixin el($size1, $size2) {
+    margin: $size1;
+    font-size: $size2;
+}
+
+.menu {
+    background: $color2;
+}
+
+.menu__logo_a {
+    color: $color5;
+}
+
+.menu__liContainer {
+    color: $color5;
+}
+
+.menu__zone * {
+    color: $color2;
+}
+
+.menu__zone {
+    background-color: $color5;
+    border-radius: 0.5vh;
+}
+
+@media (max-width: 800px) {
+    .menu {
+        background: $color6;
+    }
+
+    .menu__logo_a {
+        color: $color;
+    }
+
+    .menu__liContainer {
+        color: $color;
+    }
+
+    .menu__zone * {
+        color: $color6;
+    }
+    
+    .menu__zone {
+        background-color: $color;
+        border-radius: 0.5vh;
+    }
+}

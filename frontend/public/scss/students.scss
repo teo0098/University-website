@@ -1,0 +1,83 @@
+@import '_partial1';
+@import 'menu2';
+@import 'styles';
+
+body {
+    background: $color5;
+}
+
+.students {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.students__a {
+    width: 100%;
+    height: 100%;
+    background: $color7;
+    text-decoration: none;
+    color: $color2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10vh;
+    text-align: center;
+    transition: all 0.3s ease-out;
+}
+
+.students__signup {
+    border-right: 0.2vw solid $color2;
+}
+
+.students__h1 {
+    margin: 5vh 0;
+    color: $color7;
+    background: $color2;
+    padding: 1vh;
+    border-radius: 0.2vw;
+    letter-spacing: 0.1vw;
+    font-size: 2vw;
+}
+
+.students__i {
+    font-size: 4vw;
+}
+
+.students__p {
+    font-size: 1.1vw;
+    line-height: 1.5;
+}
+
+.students__a:hover {
+    box-shadow: inset 0 0 2vw $color2;
+}
+
+@media (max-width: 800px) {
+    .students {
+        flex-direction: column;
+    }
+
+    .students__signup {
+        border: none;
+        border-bottom: 0.2vw solid $color2;
+    }
+
+    .students__h1 {
+        font-size: 3.5vw;
+        border-radius: 0.5vw;
+    }
+
+    .students__p {
+        font-size: 2.5vw;
+    }
+
+    .students__i {
+        font-size: 7vw;
+    }
+
+    .students__a:hover {
+        box-shadow: inset 0 0 4vw $color2;
+    }
+}
