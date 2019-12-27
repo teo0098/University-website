@@ -12,23 +12,7 @@ const port = process.env.PORT;
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
 
-connection.on('error', (err) => {
-    connection.connect((error) => {
-        if (error) errorMessage = 'Unable to connect to the database, please try again later';
-        else {
-            connection.query('SELECT major_name FROM majors', (error, result) => {
-                if (error) errorMessage = 'Sorry for any issues, we couldn\'t load our university majors for you, please try again later';
-                else {
-                    result.forEach((value) => {
-                        majors.push(value.major_name);
-                    });
-                }
-            });
-        }
-    });
-});
-
-connection.connect((error) => {
+connection.getConnection((error) => {
     if (error) errorMessage = 'Unable to connect to the database, please try again later';
     else {
         connection.query('SELECT major_name FROM majors', (error, result) => {
