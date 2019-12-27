@@ -11,6 +11,11 @@ const port = process.env.PORT;
 
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
+
+connection.on('error', (err) => {
+    console.log(err.code);
+});
+
 connection.connect((error) => {
     if (error) errorMessage = 'Unable to connect to the database, please try again later';
     else {
