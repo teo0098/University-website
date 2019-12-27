@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import hbs from 'hbs';
-import connection from './dbconnection';
+import pool from './dbconnection';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import mail from './sendEmail';
@@ -12,7 +12,7 @@ const port = process.env.PORT;
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
 
-connection.getConnection((error) => {
+pool.getConnection((error, connection) => {
     if (error) errorMessage = 'Unable to connect to the database, please try again later';
     else {
         connection.query('SELECT major_name FROM majors', (error, result) => {
@@ -22,6 +22,7 @@ connection.getConnection((error) => {
                     majors.push(value.major_name);
                 });
             }
+            connection.release();
         });
     }
 });
@@ -65,7 +66,7 @@ server.post('/students/registration', (req, res) => {
     const select = `SELECT * FROM students WHERE student_PIN=?;
                     SELECT * FROM students WHERE student_phonenumber=?;
                     SELECT * FROM students WHERE student_email=?`;
-    connection.query(select, [req.body.pin, req.body.phone, req.body.email], (error, result) => {
+    pool.query(select, [req.body.pin, req.body.phone, req.body.email], (error, result) => {
         if (error) {
             const string: string = encodeURIComponent('Unable to connect to the database, please try again later');
             res.redirect(`/students/signup?queryy=${string}`); 
