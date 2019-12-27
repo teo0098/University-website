@@ -1,10 +1,3 @@
-* {
-  box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 .menu {
   width: 100%;
   display: flex;
@@ -161,7 +154,14 @@
     padding: 3vh;
   }
 }
-.signup {
+* {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.confirmation {
   width: 100%;
   min-height: 100vh;
   background-image: url("../img/students-intro.jpg");
@@ -171,147 +171,12 @@
   background-attachment: fixed;
 }
 
-.signup__section {
-  width: 100%;
+.confirmation__section {
   padding: 5vh;
-  display: flex;
-  justify-content: center;
 }
 
-.signup__form {
-  min-width: 60vw;
-  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
-  background: rgba(24, 23, 23, 0.753);
-  padding: 5vh;
-  color: #f7f2f2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.signup__input {
-  width: 100%;
-  border: none;
-  outline: none;
-  border-bottom: 0.2vh solid #FF7F50;
-  background: transparent;
+.confirmation__h1 {
   color: #f1f1f1;
-  padding: 0.5vh;
-  letter-spacing: 0.1vw;
 }
 
-.signup__data {
-  margin: 2vh 0;
-  width: 30%;
-}
-
-.signup__div {
-  width: 60vw;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.signup__btn {
-  margin: 2vh 0;
-  padding: 1vh;
-  cursor: pointer;
-  font-size: 1.5vw;
-  border: 0.1vw solid #FF7F50;
-  background: transparent;
-  color: #f1f1f1;
-  border-radius: 0.3vw;
-  outline: none;
-  position: relative;
-  letter-spacing: 0.1vw;
-}
-
-.signup__btn::after {
-  content: "";
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 0;
-  background: #FF7F50;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: all 0.2s ease-out;
-}
-
-.signup__btn:hover::after {
-  content: "Sign up";
-  height: 100%;
-  color: rgba(24, 23, 23, 0.753);
-}
-
-.signup__h4, .signup__label {
-  letter-spacing: 0.1vw;
-}
-
-.signup__label {
-  margin: 0 0.5vw;
-}
-
-.signup__error {
-  display: none;
-  padding: 1vh;
-  background: crimson;
-  color: rgba(24, 23, 23, 0.753);
-  border-top: none;
-  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
-}
-
-.signup__option {
-  color: rgba(24, 23, 23, 0.753);
-}
-
-.signup__errorIcon, .signup__successIcon {
-  font-size: 5vw;
-  color: crimson;
-  margin: 2vh 0;
-}
-
-.signup__errorName, .signup__successName {
-  text-align: center;
-  color: crimson;
-}
-
-.signup__successIcon {
-  color: #32CD32;
-}
-
-.signup__successName {
-  color: #32CD32;
-}
-
-@media (max-width: 800px) {
-  .signup__form {
-    width: 100%;
-  }
-
-  .signup__div {
-    flex-wrap: nowrap;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .signup__data {
-    width: 100%;
-  }
-
-  .signup__btn {
-    width: 100%;
-    font-size: 4vw;
-    padding: 2vh;
-  }
-
-  .signup__errorIcon {
-    font-size: 8vw;
-  }
-}
-
-/*# sourceMappingURL=signup.css.map */
+/*# sourceMappingURL=students_confirm.css.map */

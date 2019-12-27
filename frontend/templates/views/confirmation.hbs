@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="/img/students-icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/signup.css">
+    <link rel="stylesheet" href="/css/students_confirm.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&display=swap" rel="stylesheet">
-    <title>Sign up</title>
+    <title>Confirmation</title>
     <script src="https://kit.fontawesome.com/aa9fb73e01.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="signup">
+    <div class="confirmation">
         {{>menu}}
-        <section class="signup__section">
-            <form class="signup__form" action="/students/registration" method="POST">
-                {{>student_form}}
-            </form>
-        </section>
+        <header class="confirmation__section">
+            <h2 class="confirmation__h1">We are thankful for confirming your registration {{name}}.
+                 We will let you know about your application soon by sending an email to your mailbox. Stay tuned.</h2>
+        </header>
     </div>
-    <script src="/src/signup.js"></script>
+    <script src="/src/students.js"></script>
 </body>
 </html>

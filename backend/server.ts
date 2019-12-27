@@ -4,7 +4,7 @@ import hbs from 'hbs';
 import connection from './dbconnection';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
-import email from './sendEmail';
+import mail from './sendEmail';
 
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
@@ -55,7 +55,8 @@ server.get('/students/signup', (req, res) => {
         query: req.query.queryy,
         pin: req.query.pin,
         phone: req.query.phone,
-        email: req.query.email
+        email: req.query.email,
+        success: req.query.success || ''
     });
 });
 
@@ -70,17 +71,18 @@ server.post('/students/registration', (req, res) => {
         } else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
                 const token = jwt.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
-                email.sendConfirmMessage(req.body.email, req.body.name);
+                mail.sendConfirmMessage(req.body.email, req.body.name);
+                res.redirect(`/students/signup?success=${encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your mail in 24 hours')}`);
             }
             else {
                 let pin: string = '', phone: string = '', email: string = '', query: string = '';
                 if (result[0].length > 0) {
                     query = encodeURIComponent(' ');
-                    pin = encodeURIComponent('This personal identity number already exists in the database\n');
+                    pin = encodeURIComponent('This personal identity number already exists in the database');
                 }
                 if (result[1].length > 0) {
                     query = encodeURIComponent(' ');
-                    phone = encodeURIComponent('This phone number already exists in the database\n');
+                    phone = encodeURIComponent('This phone number already exists in the database');
                 } 
                 if (result[2].length > 0) {
                     query = encodeURIComponent(' ');
@@ -89,6 +91,12 @@ server.post('/students/registration', (req, res) => {
                 res.redirect(`/students/signup?queryy=${query}&pin=${pin}&phone=${phone}&email=${email}`);
             }
         }
+    });
+});
+
+server.get('/students/confirmation', (req, res) => {
+    res.render('confirmation', {
+        name: encodeURIComponent(req.query.name)
     });
 });
 

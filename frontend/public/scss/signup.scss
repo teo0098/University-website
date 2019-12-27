@@ -110,14 +110,23 @@
     color: $color4;
 }
 
-.signup__errorIcon {
+.signup__errorIcon, .signup__successIcon {
     font-size: 5vw;
     color: $color3;
     margin: 2vh 0;
 }
 
-.signup__errorName {
+.signup__errorName, .signup__successName {
     text-align: center;
+    color: $color3;
+}
+
+.signup__successIcon {
+    color: $color8;
+}
+
+.signup__successName {
+    color: $color8;
 }
 
 @media (max-width: 800px) {

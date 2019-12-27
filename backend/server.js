@@ -54,7 +54,8 @@ server.get('/students/signup', function (req, res) {
         query: req.query.queryy,
         pin: req.query.pin,
         phone: req.query.phone,
-        email: req.query.email
+        email: req.query.email,
+        success: req.query.success || ''
     });
 });
 server.post('/students/registration', function (req, res) {
@@ -68,16 +69,17 @@ server.post('/students/registration', function (req, res) {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
                 var token = jsonwebtoken_1.default.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
                 sendEmail_1.default.sendConfirmMessage(req.body.email, req.body.name);
+                res.redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your mail in 24 hours'));
             }
             else {
                 var pin = '', phone = '', email_1 = '', query = '';
                 if (result[0].length > 0) {
                     query = encodeURIComponent(' ');
-                    pin = encodeURIComponent('This personal identity number already exists in the database\n');
+                    pin = encodeURIComponent('This personal identity number already exists in the database');
                 }
                 if (result[1].length > 0) {
                     query = encodeURIComponent(' ');
-                    phone = encodeURIComponent('This phone number already exists in the database\n');
+                    phone = encodeURIComponent('This phone number already exists in the database');
                 }
                 if (result[2].length > 0) {
                     query = encodeURIComponent(' ');
@@ -86,6 +88,11 @@ server.post('/students/registration', function (req, res) {
                 res.redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email_1);
             }
         }
+    });
+});
+server.get('/students/confirmation', function (req, res) {
+    res.render('confirmation', {
+        name: encodeURIComponent(req.query.name)
     });
 });
 server.listen(port, function () {
