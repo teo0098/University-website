@@ -11,14 +11,14 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var sendEmail_1 = __importDefault(require("./sendEmail"));
 var server = express_1.default();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 var errorMessage = null;
 var majors = [];
-dbconnection_1.default.connect(function (error) {
+dbconnection_1.default.getConnection(function (error, connection) {
     if (error)
         errorMessage = 'Unable to connect to the database, please try again later';
     else {
-        dbconnection_1.default.query('SELECT major_name FROM majors', function (error, result) {
+        connection.query('SELECT major_name FROM majors', function (error, result) {
             if (error)
                 errorMessage = 'Sorry for any issues, we couldn\'t load our university majors for you, please try again later';
             else {
@@ -26,6 +26,7 @@ dbconnection_1.default.connect(function (error) {
                     majors.push(value.major_name);
                 });
             }
+            connection.release();
         });
     }
 });
