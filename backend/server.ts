@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import mail from './sendEmail';
 
 const server: express.Application = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
