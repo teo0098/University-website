@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import mail from './sendEmail';
 
+const server: express.Application = express();
+const port = process.env.PORT || 3000;
+
 let errorMessage: string | null = null;
 let majors: Array<string> = [];
 connection.connect((error) => {
@@ -21,9 +24,6 @@ connection.connect((error) => {
         });
     }
 });
-
-const server: express.Application = express();
-const port = process.env.PORT;
 
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
@@ -70,9 +70,9 @@ server.post('/students/registration', (req, res) => {
             res.redirect(`/students/signup?queryy=${string}`); 
         } else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
-                const token = jwt.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
+                jwt.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
                 mail.sendConfirmMessage(req.body.email, req.body.name);
-                res.redirect(`/students/signup?success=${encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your mail in 24 hours')}`);
+                res.redirect(`/students/signup?success=${encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your email in 24 hours')}. It is possible that our email got into spam folder`);
             }
             else {
                 let pin: string = '', phone: string = '', email: string = '', query: string = '';

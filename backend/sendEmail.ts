@@ -9,7 +9,7 @@ const sendConfirmMessage: (email: string, name: string) => void = (email: string
         subject: 'Confirm your registration',
         html: `<h1>Welcome ${name}</h1>
                 <h3>Please confirm your registration process by clicking the link down below</h3>
-                <a href="#">Confirm</a>`
+                <a href="https://teo-university-app.herokuapp.com/students/confirmation?name=${name}">Confirm</a>`
     };
     mail.send(message);
 };

@@ -309,7 +309,7 @@
     padding: 2vh;
   }
 
-  .signup__errorIcon {
+  .signup__errorIcon, .signup__successIcon {
     font-size: 8vw;
   }
 }

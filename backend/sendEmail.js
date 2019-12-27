@@ -10,7 +10,7 @@ var sendConfirmMessage = function (email, name) {
         to: email,
         from: 'teodor.tkaczyk98@gmail.com',
         subject: 'Confirm your registration',
-        html: "<h1>Welcome " + name + "</h1>\n                <h3>Please confirm your registration process by clicking the link down below</h3>\n                <a href=\"#\">Confirm</a>"
+        html: "<h1>Welcome " + name + "</h1>\n                <h3>Please confirm your registration process by clicking the link down below</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/confirmation?name=" + name + "\">Confirm</a>"
     };
     mail_1.default.send(message);
 };

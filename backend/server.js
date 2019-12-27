@@ -10,6 +10,8 @@ var dbconnection_1 = __importDefault(require("./dbconnection"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var sendEmail_1 = __importDefault(require("./sendEmail"));
+var server = express_1.default();
+var port = process.env.PORT || 3000;
 var errorMessage = null;
 var majors = [];
 dbconnection_1.default.connect(function (error) {
@@ -27,8 +29,6 @@ dbconnection_1.default.connect(function (error) {
         });
     }
 });
-var server = express_1.default();
-var port = process.env.PORT;
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(body_parser_1.default.json());
 server.set('views', path_1.default.join(__dirname, '../frontend/templates/views'));
@@ -67,12 +67,12 @@ server.post('/students/registration', function (req, res) {
         }
         else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
-                var token = jsonwebtoken_1.default.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
+                jsonwebtoken_1.default.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
                 sendEmail_1.default.sendConfirmMessage(req.body.email, req.body.name);
-                res.redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your mail in 24 hours'));
+                res.redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your email in 24 hours') + ". It is possible that our email got into spam folder");
             }
             else {
-                var pin = '', phone = '', email_1 = '', query = '';
+                var pin = '', phone = '', email = '', query = '';
                 if (result[0].length > 0) {
                     query = encodeURIComponent(' ');
                     pin = encodeURIComponent('This personal identity number already exists in the database');
@@ -83,9 +83,9 @@ server.post('/students/registration', function (req, res) {
                 }
                 if (result[2].length > 0) {
                     query = encodeURIComponent(' ');
-                    email_1 = encodeURIComponent('This email already exists in the database');
+                    email = encodeURIComponent('This email already exists in the database');
                 }
-                res.redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email_1);
+                res.redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email);
             }
         }
     });
