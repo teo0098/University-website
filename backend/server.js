@@ -8,8 +8,8 @@ var path_1 = __importDefault(require("path"));
 var hbs_1 = __importDefault(require("hbs"));
 var dbconnection_1 = __importDefault(require("./dbconnection"));
 var body_parser_1 = __importDefault(require("body-parser"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var sendEmail_1 = __importDefault(require("./sendEmail"));
+var express_session_1 = __importDefault(require("express-session"));
+var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var server = express_1.default();
 var port = process.env.PORT;
 var errorMessage = null;
@@ -30,6 +30,8 @@ dbconnection_1.default.getConnection(function (error, connection) {
         });
     }
 });
+server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, maxAge: 86400000 * 14 }));
+server.use(cookie_parser_1.default());
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(body_parser_1.default.json());
 server.set('views', path_1.default.join(__dirname, '../frontend/templates/views'));
@@ -68,9 +70,10 @@ server.post('/students/registration', function (req, res) {
         }
         else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
-                jsonwebtoken_1.default.sign({ user: req.body }, process.env.SECRET_KEY_SIGNED_UP, { expiresIn: '10m' });
-                sendEmail_1.default.sendConfirmMessage(req.body.email, req.body.name);
-                res.redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your email in 24 hours') + ". It is possible that our email got into spam folder");
+                res.cookie('user', req.body, { maxAge: 60000 * 2 });
+                86400000;
+                //mail.sendConfirmMessage(req.body.email, req.body.name);
+                res.redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your email in 24 hours. It is possible that our email got into spam folder'));
             }
             else {
                 var pin = '', phone = '', email = '', query = '';
@@ -92,9 +95,17 @@ server.post('/students/registration', function (req, res) {
     });
 });
 server.get('/students/confirmation', function (req, res) {
-    res.render('confirmation', {
-        name: encodeURIComponent(req.query.name)
-    });
+    if (req.cookies.user) {
+        res.render('confirmation', {
+            name: req.cookies.user.name
+        });
+        //(<any>req).session.register = req.cookies.user;
+        //const user =  (<any>req).session.register;
+        //mail.sendDecisionMessage(user.name, user.lastname, user.pin);
+    }
+    else {
+        res.redirect('/students/signup');
+    }
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

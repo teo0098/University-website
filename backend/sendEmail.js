@@ -10,10 +10,20 @@ var sendConfirmMessage = function (email, name) {
         to: email,
         from: 'teodor.tkaczyk98@gmail.com',
         subject: 'Confirm your registration',
-        html: "<h1>Welcome " + name + "</h1>\n                <h3>Please confirm your registration process by clicking the link down below</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/confirmation?name=" + name + "\">Confirm</a>"
+        html: "<h1>Welcome " + name + "</h1>\n                <h3>Please confirm your registration process by clicking the link down below</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/confirmation\">Confirm</a>"
+    };
+    mail_1.default.send(message);
+};
+var sendDecisionMessage = function (name, lastname, pin) {
+    var message = {
+        to: 'teodor.tkaczyk98@gmail.com',
+        from: 'teodor.tkaczyk98@gmail.com',
+        subject: 'Application decision',
+        html: "<h1>What to do with this user?</h1>\n                <h3>Name: " + name + "</h3>\n                <h3>Last name: " + lastname + "</h3>\n                <h3>Personal ID: " + pin + "</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/acception\">Accept student</a>\n                <a href=\"https://teo-university-app.herokuapp.com/students/rejection\">Reject student</a>"
     };
     mail_1.default.send(message);
 };
 exports.default = {
-    sendConfirmMessage: sendConfirmMessage
+    sendConfirmMessage: sendConfirmMessage,
+    sendDecisionMessage: sendDecisionMessage
 };
