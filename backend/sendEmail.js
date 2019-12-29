@@ -23,6 +23,8 @@ var sendDecisionMessage = function (name, lastname, pin) {
     };
     mail_1.default.send(message);
 };
+var sendMessageToStudent = function () {
+};
 exports.default = {
     sendConfirmMessage: sendConfirmMessage,
     sendDecisionMessage: sendDecisionMessage
