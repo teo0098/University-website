@@ -169,18 +169,36 @@ server.get('/students/confirmation', function (req, res) {
     }
 });
 server.get('/students/acception', function (req, res) {
-    if (req.session.confirm) {
+    if (req.session.confirm && req.query.key === process.env.DECISION_KEY) {
+        var user = req.session.confirm;
+        var data = {
+            student_id: null, student_name: user.name, student_lastname: user.lastname, student_sex: user.sex, student_PIN: user.pin,
+            student_birthdate: user.birthdate, student_phonenumber: user.phone, student_email: user.email, student_zipcode: user.zipcode,
+            student_location: user.location, student_apartmentnumber: user.apartment, student_street: user.street, student_password: user.password
+        };
+        var insert = "INSERT INTO students SET ?";
+        dbconnection_1.default.query(insert, data, function (err, result) {
+            if (err) {
+                res.send({ error: 'Sth went wrong' });
+            }
+        });
+        sendEmail_1.default.sendAcceptionMessage(req.session.confirm.email, req.session.confirm.name);
+        res.status(201).redirect('');
     }
     else {
         res.status(401).redirect('/students/signup');
     }
 });
 server.get('/students/rejection', function (req, res) {
-    if (req.session.confirm) {
-    }
-    else {
+    /*
+    if ((<any>req).session.confirm && req.query.key === process.env.DECISION_KEY) {
+        mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
+        res.status(201).redirect('');
+    } else {
         res.status(401).redirect('/students/signup');
     }
+    */
+    res.send({ key: req.query.key });
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

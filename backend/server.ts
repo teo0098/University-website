@@ -146,12 +146,15 @@ server.get('/students/acception', (req, res) => {
 });
 
 server.get('/students/rejection', (req, res) => {
+    /*
     if ((<any>req).session.confirm && req.query.key === process.env.DECISION_KEY) {
         mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
         res.status(201).redirect('');
     } else {
         res.status(401).redirect('/students/signup');
     }
+    */
+   res.send({ key: req.query.key });
 });
 
 server.listen(port, () => {

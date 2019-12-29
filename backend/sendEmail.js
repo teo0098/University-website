@@ -19,13 +19,31 @@ var sendDecisionMessage = function (name, lastname, pin) {
         to: 'teodor.tkaczyk98@gmail.com',
         from: 'teodor.tkaczyk98@gmail.com',
         subject: 'Application decision',
-        html: "<h1>What to do with this user?</h1>\n                <h3>Name: " + name + "</h3>\n                <h3>Last name: " + lastname + "</h3>\n                <h3>Personal ID: " + pin + "</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/acception\">Accept student</a>\n                <a href=\"https://teo-university-app.herokuapp.com/students/rejection\">Reject student</a>"
+        html: "<h1>What to do with this user?</h1>\n                <h3>Name: " + name + "</h3>\n                <h3>Last name: " + lastname + "</h3>\n                <h3>Personal ID: " + pin + "</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/acception?key=" + process.env.DECISION_KEY + "\">Accept student</a>\n                <a href=\"https://teo-university-app.herokuapp.com/students/rejection?key=" + process.env.DECISION_KEY + "\">Reject student</a>"
     };
     mail_1.default.send(message);
 };
-var sendMessageToStudent = function () {
+var sendAcceptionMessage = function (email, name) {
+    var message = {
+        to: email,
+        from: 'teodor.tkaczyk98@gmail.com',
+        subject: 'Decision',
+        html: "<h1>Welcome " + name + "</h1>\n                <h3>We want to inform you that you passed our requirements and we are looking forward to see you at our academy.</h3>"
+    };
+    mail_1.default.send(message);
+};
+var sendRejectionMessage = function (email, name) {
+    var message = {
+        to: email,
+        from: 'teodor.tkaczyk98@gmail.com',
+        subject: 'Decision',
+        html: "<h1>Welcome " + name + "</h1>\n                <h3>We want to inform you that you didn't pass our requirements. We hope you won't give up and try another time. Stay positive.</h3>"
+    };
+    mail_1.default.send(message);
 };
 exports.default = {
     sendConfirmMessage: sendConfirmMessage,
-    sendDecisionMessage: sendDecisionMessage
+    sendDecisionMessage: sendDecisionMessage,
+    sendAcceptionMessage: sendAcceptionMessage,
+    sendRejectionMessage: sendRejectionMessage
 };
