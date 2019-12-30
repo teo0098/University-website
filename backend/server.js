@@ -54,11 +54,11 @@ var errorMessage = null;
 var majors = [];
 dbconnection_1.default.getConnection(function (error, connection) {
     if (error)
-        errorMessage = 'Unable to connect to the database, please try again later';
+        errorMessage = 'Unable to connect to the database, please try again later.';
     else {
         connection.query('SELECT major_name FROM majors', function (error, result) {
             if (error)
-                errorMessage = 'Sorry for any issues, we couldn\'t load our university majors for you, please try again later';
+                errorMessage = 'Sorry for any issues, we couldn\'t load our university majors for you, please try again later.';
             else {
                 result.forEach(function (value) {
                     majors.push(value.major_name);
@@ -102,12 +102,12 @@ server.get('/students/signup', function (req, res) {
 server.post('/students/registration', function (req, res) {
     var select = "SELECT * FROM students WHERE student_PIN=?;\n                    SELECT * FROM students WHERE student_phonenumber=?;\n                    SELECT * FROM students WHERE student_email=?";
     dbconnection_1.default.query(select, [req.body.pin, req.body.phone, req.body.email], function (error, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var string, hash, e_1, pin, phone, email, query;
+        var string, hash, user_1, data, insert, e_1, pin, phone, email, query;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!error) return [3 /*break*/, 1];
-                    string = encodeURIComponent('Unable to connect to the database, please try again later');
+                    string = encodeURIComponent('Unable to connect to the database, please try again later.');
                     res.status(404).redirect("/students/signup?queryy=" + string);
                     return [3 /*break*/, 7];
                 case 1:
@@ -119,14 +119,23 @@ server.post('/students/registration', function (req, res) {
                 case 3:
                     hash = _a.sent();
                     req.body.password = hash;
-                    req.body.name = req.body.name.toLowerCase();
-                    req.body.lastname = req.body.lastname.toLowerCase();
-                    req.body.location = req.body.location.toLowerCase();
-                    req.body.street = req.body.street.toLowerCase();
-                    res.cookie('name', req.body.name, { maxAge: 86400000 });
-                    req.session.register = req.body;
-                    sendEmail_1.default.sendConfirmMessage(req.body.email, req.body.name);
-                    res.status(201).redirect("/students/signup?success=" + encodeURIComponent('We sent you an confirming email to your mailbox. Please confirm your email in 24 hours. It is possible that our email got into spam folder'));
+                    user_1 = req.body;
+                    data = {
+                        student_id: null, student_name: user_1.name, student_lastname: user_1.lastname, student_sex: user_1.sex, student_PIN: user_1.pin,
+                        student_birthdate: user_1.birthdate, student_phonenumber: user_1.phone, student_email: user_1.email, student_zipcode: user_1.zipcode,
+                        student_location: user_1.location, student_apartmentnumber: user_1.apartment, student_street: user_1.street, student_password: user_1.password
+                    };
+                    insert = "INSERT INTO students SET ?";
+                    dbconnection_1.default.query(insert, data, function (err) {
+                        if (err) {
+                            res.status(500).redirect("/students/signup?queryy=\n                            " + encodeURIComponent('We weren\'t able to create your account. Please try again later.'));
+                        }
+                        else {
+                            sendEmail_1.default.sendWelcomeMessage(user_1.email, user_1.name);
+                            sendEmail_1.default.sendDecisionMessage(user_1.name, user_1.lastname, user_1.pin, process.env.DECISION_KEY, user_1.email);
+                            res.status(201).redirect("/students/signup?success=" + encodeURIComponent("We sent you an welcome email to your mailbox. Check it out. \n                            It is possible that our email got into spam folder."));
+                        }
+                    });
                     return [3 /*break*/, 5];
                 case 4:
                     e_1 = _a.sent();
@@ -137,15 +146,15 @@ server.post('/students/registration', function (req, res) {
                     pin = '', phone = '', email = '', query = '';
                     if (result[0].length > 0) {
                         query = encodeURIComponent(' ');
-                        pin = encodeURIComponent('This personal identity number already exists in the database');
+                        pin = encodeURIComponent('This personal identity number already exists in the database.');
                     }
                     if (result[1].length > 0) {
                         query = encodeURIComponent(' ');
-                        phone = encodeURIComponent('This phone number already exists in the database');
+                        phone = encodeURIComponent('This phone number already exists in the database.');
                     }
                     if (result[2].length > 0) {
                         query = encodeURIComponent(' ');
-                        email = encodeURIComponent('This email already exists in the database');
+                        email = encodeURIComponent('This email already exists in the database.');
                     }
                     res.status(403).redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email);
                     _a.label = 7;
@@ -155,35 +164,20 @@ server.post('/students/registration', function (req, res) {
     }); });
 });
 server.get('/students/confirmation', function (req, res) {
-    if (req.cookies.name) {
+    if (req.query.confirm === process.env.CONFIRM_KEY) {
+        var user = req.query;
         res.status(200).render('confirmation', {
-            name: req.cookies.name
+            name: user.name
         });
-        req.session.confirm = req.session.register;
-        delete req.session.register;
-        var user = req.session.confirm;
-        sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY);
-        res.clearCookie('name');
+        sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email);
     }
     else {
-        res.status(401).redirect('/');
+        res.status(401).redirect('/students/signup');
     }
 });
 server.get('/students/acception', function (req, res) {
-    if (req.session.confirm && req.query.decision === process.env.DECISION_KEY) {
-        var user = req.session.confirm;
-        var data = {
-            student_id: null, student_name: user.name, student_lastname: user.lastname, student_sex: user.sex, student_PIN: user.pin,
-            student_birthdate: user.birthdate, student_phonenumber: user.phone, student_email: user.email, student_zipcode: user.zipcode,
-            student_location: user.location, student_apartmentnumber: user.apartment, student_street: user.street, student_password: user.password
-        };
-        var insert = "INSERT INTO students SET ?";
-        dbconnection_1.default.query(insert, data, function (err, result) {
-            if (err) {
-                res.send({ error: 'Sth went wrong' });
-            }
-        });
-        sendEmail_1.default.sendAcceptionMessage(req.session.confirm.email, req.session.confirm.name);
+    if (req.query.decision === process.env.DECISION_KEY) {
+        sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
         res.status(201).redirect('/');
     }
     else {
@@ -191,8 +185,14 @@ server.get('/students/acception', function (req, res) {
     }
 });
 server.get('/students/rejection', function (req, res) {
-    if (req.session.confirm && req.query.decision === process.env.DECISION_KEY) {
-        sendEmail_1.default.sendRejectionMessage(req.session.confirm.email, req.session.confirm.name);
+    if (req.query.decision === process.env.DECISION_KEY) {
+        var deletee = "DELETE FROM students WHERE student_PIN=?";
+        dbconnection_1.default.query(deletee, [req.body.pin], function (err) {
+            if (err) {
+                res.status(500).send({ error: 'Not deleted' });
+            }
+        });
+        sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
         res.status(201).redirect('/');
     }
     else {
