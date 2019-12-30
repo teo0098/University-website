@@ -162,7 +162,7 @@ server.get('/students/confirmation', function (req, res) {
         req.session.confirm = req.session.register;
         delete req.session.register;
         var user = req.session.confirm;
-        sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin);
+        sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY);
     }
     else {
         res.status(401).redirect('/students/signup');
@@ -190,15 +190,13 @@ server.get('/students/acception', function (req, res) {
     }
 });
 server.get('/students/rejection', function (req, res) {
-    /*
-    if ((<any>req).session.confirm && req.query.decision === process.env.DECISION_KEY) {
-        mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
+    if (req.session.confirm && req.query.decision === process.env.DECISION_KEY) {
+        sendEmail_1.default.sendRejectionMessage(req.session.confirm.email, req.session.confirm.name);
         res.status(201).redirect('');
-    } else {
+    }
+    else {
         res.status(401).redirect('/students/signup');
     }
-    */
-    res.send({ key: req.query.decision });
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

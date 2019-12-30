@@ -14,12 +14,12 @@ var sendConfirmMessage = function (email, name) {
     };
     mail_1.default.send(message);
 };
-var sendDecisionMessage = function (name, lastname, pin) {
+var sendDecisionMessage = function (name, lastname, pin, decision) {
     var message = {
         to: 'teodor.tkaczyk98@gmail.com',
         from: 'teodor.tkaczyk98@gmail.com',
         subject: 'Application decision',
-        html: "<h1>What to do with this user?</h1>\n                <h3>Name: " + name + "</h3>\n                <h3>Last name: " + lastname + "</h3>\n                <h3>Personal ID: " + pin + "</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/acception?decision=" + process.env.DECISION_KEY + "\">Accept student</a>\n                <a href=\"https://teo-university-app.herokuapp.com/students/rejection?decision=" + process.env.DECISION_KEY + "\">Reject student</a>"
+        html: "<h1>What to do with this user?</h1>\n                <h3>Name: " + name + "</h3>\n                <h3>Last name: " + lastname + "</h3>\n                <h3>Personal ID: " + pin + "</h3>\n                <a href=\"https://teo-university-app.herokuapp.com/students/acception?decision=" + decision + "\">Accept student</a>\n                <a href=\"https://teo-university-app.herokuapp.com/students/rejection?decision=" + decision + "\">Reject student</a>"
     };
     mail_1.default.send(message);
 };
