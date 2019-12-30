@@ -170,7 +170,7 @@ server.get('/students/confirmation', function (req, res) {
     }
 });
 server.get('/students/acception', function (req, res) {
-    if (req.session.confirm && req.query.key === process.env.DECISION_KEY) {
+    if (req.session.confirm && req.query.decision === process.env.DECISION_KEY) {
         var user = req.session.confirm;
         var data = {
             student_id: null, student_name: user.name, student_lastname: user.lastname, student_sex: user.sex, student_PIN: user.pin,

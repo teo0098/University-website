@@ -126,7 +126,7 @@ server.get('/students/confirmation', (req, res) => {
 });
 
 server.get('/students/acception', (req, res) => {
-    if ((<any>req).session.confirm && req.query.key === process.env.DECISION_KEY) {
+    if ((<any>req).session.confirm && req.query.decision === process.env.DECISION_KEY) {
         const user = (<any>req).session.confirm;
         const data = {
             student_id: null, student_name: user.name, student_lastname: user.lastname, student_sex: user.sex, student_PIN: user.pin,
