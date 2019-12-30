@@ -191,14 +191,14 @@ server.get('/students/acception', function (req, res) {
 });
 server.get('/students/rejection', function (req, res) {
     /*
-    if ((<any>req).session.confirm && req.query.key === process.env.DECISION_KEY) {
+    if ((<any>req).session.confirm && req.query.decision === process.env.DECISION_KEY) {
         mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
         res.status(201).redirect('');
     } else {
         res.status(401).redirect('/students/signup');
     }
     */
-    res.send({ key: req.query.key });
+    res.send({ key: req.query.decision });
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

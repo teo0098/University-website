@@ -25,8 +25,8 @@ const sendDecisionMessage: (name: string, lastname: string, pin: string) => void
                 <h3>Name: ${name}</h3>
                 <h3>Last name: ${lastname}</h3>
                 <h3>Personal ID: ${pin}</h3>
-                <a href="https://teo-university-app.herokuapp.com/students/acception?key=${process.env.DECISION_KEY}">Accept student</a>
-                <a href="https://teo-university-app.herokuapp.com/students/rejection?key=${process.env.DECISION_KEY}">Reject student</a>`
+                <a href="https://teo-university-app.herokuapp.com/students/acception?decision=${process.env.DECISION_KEY}">Accept student</a>
+                <a href="https://teo-university-app.herokuapp.com/students/rejection?decision=${process.env.DECISION_KEY}">Reject student</a>`
     };
     mail.send(message);
 }
