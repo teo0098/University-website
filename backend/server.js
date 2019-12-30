@@ -121,9 +121,11 @@ server.post('/students/registration', function (req, res) {
                     req.body.password = hash;
                     user_1 = req.body;
                     data = {
-                        student_id: null, student_name: user_1.name, student_lastname: user_1.lastname, student_sex: user_1.sex, student_PIN: user_1.pin,
+                        student_id: null, student_name: user_1.name.toLowerCase(), student_lastname: user_1.lastname.toLowerCase(),
+                        student_sex: user_1.sex, student_PIN: user_1.pin,
                         student_birthdate: user_1.birthdate, student_phonenumber: user_1.phone, student_email: user_1.email, student_zipcode: user_1.zipcode,
-                        student_location: user_1.location, student_apartmentnumber: user_1.apartment, student_street: user_1.street, student_password: user_1.password
+                        student_location: user_1.location.toLowerCase(), student_apartmentnumber: user_1.apartment, student_street: user_1.street.toLowerCase(),
+                        student_password: user_1.password
                     };
                     insert = "INSERT INTO students SET ?";
                     dbconnection_1.default.query(insert, data, function (err) {

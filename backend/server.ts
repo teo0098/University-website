@@ -78,9 +78,11 @@ server.post('/students/registration', (req, res) => {
                     req.body.password = hash;
                     const user = req.body;
                     const data = {
-                        student_id: null, student_name: user.name, student_lastname: user.lastname, student_sex: user.sex, student_PIN: user.pin,
+                        student_id: null, student_name: user.name.toLowerCase(), student_lastname: user.lastname.toLowerCase(),
+                        student_sex: user.sex, student_PIN: user.pin,
                         student_birthdate: user.birthdate, student_phonenumber: user.phone, student_email: user.email, student_zipcode: user.zipcode,
-                        student_location: user.location, student_apartmentnumber: user.apartment, student_street: user.street, student_password: user.password
+                        student_location: user.location.toLowerCase(), student_apartmentnumber: user.apartment, student_street: user.street.toLowerCase(),
+                        student_password: user.password
                     };
                     const insert = `INSERT INTO students SET ?`;
                     pool.query(insert, data, (err) => {
