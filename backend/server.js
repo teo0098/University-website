@@ -122,10 +122,10 @@ server.post('/students/registration', function (req, res) {
                     user_1 = req.body;
                     data = {
                         student_id: null, student_name: user_1.name.toLowerCase(), student_lastname: user_1.lastname.toLowerCase(),
-                        student_sex: user_1.sex, student_PIN: user_1.pin,
-                        student_birthdate: user_1.birthdate, student_phonenumber: user_1.phone, student_email: user_1.email, student_zipcode: user_1.zipcode,
-                        student_location: user_1.location.toLowerCase(), student_apartmentnumber: user_1.apartment, student_street: user_1.street.toLowerCase(),
-                        student_password: user_1.password
+                        student_sex: user_1.sex, student_PIN: user_1.pin, student_birthdate: user_1.birthdate,
+                        student_phonenumber: user_1.phone, student_email: user_1.email, student_zipcode: user_1.zipcode,
+                        student_location: user_1.location.toLowerCase(), student_apartmentnumber: user_1.apartment,
+                        student_street: user_1.street.toLowerCase(), student_password: user_1.password
                     };
                     insert = "INSERT INTO students SET ?";
                     dbconnection_1.default.query(insert, data, function (err) {
@@ -193,9 +193,12 @@ server.get('/students/rejection', function (req, res) {
             if (err) {
                 res.status(500).send({ error: 'Not deleted' });
             }
+            else {
+                res.send({ pin: req.body.pin });
+            }
         });
-        sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
-        res.status(201).redirect('/');
+        //mail.sendRejectionMessage(req.query.email, req.query.name);
+        //res.status(201).redirect('/');
     }
     else {
         res.status(401).redirect('/students/signup');
