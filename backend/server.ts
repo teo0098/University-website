@@ -118,7 +118,7 @@ server.get('/students/confirmation', (req, res) => {
         (<any>req).session.confirm = (<any>req).session.register;
         delete (<any>req).session.register;
         const user =  (<any>req).session.confirm;
-        mail.sendDecisionMessage(user.name, user.lastname, user.pin);
+        mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY);
     } else {
         res.status(401).redirect('/students/signup');
     }    
@@ -146,15 +146,12 @@ server.get('/students/acception', (req, res) => {
 });
 
 server.get('/students/rejection', (req, res) => {
-    /*
     if ((<any>req).session.confirm && req.query.decision === process.env.DECISION_KEY) {
         mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
         res.status(201).redirect('');
     } else {
         res.status(401).redirect('/students/signup');
     }
-    */
-   res.send({ key: req.query.decision });
 });
 
 server.listen(port, () => {
