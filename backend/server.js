@@ -163,9 +163,10 @@ server.get('/students/confirmation', function (req, res) {
         delete req.session.register;
         var user = req.session.confirm;
         sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY);
+        res.clearCookie('name');
     }
     else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/');
     }
 });
 server.get('/students/acception', function (req, res) {
@@ -183,7 +184,7 @@ server.get('/students/acception', function (req, res) {
             }
         });
         sendEmail_1.default.sendAcceptionMessage(req.session.confirm.email, req.session.confirm.name);
-        res.status(201).redirect('');
+        res.status(201).redirect('/');
     }
     else {
         res.status(401).redirect('/students/signup');
@@ -192,7 +193,7 @@ server.get('/students/acception', function (req, res) {
 server.get('/students/rejection', function (req, res) {
     if (req.session.confirm && req.query.decision === process.env.DECISION_KEY) {
         sendEmail_1.default.sendRejectionMessage(req.session.confirm.email, req.session.confirm.name);
-        res.status(201).redirect('');
+        res.status(201).redirect('/');
     }
     else {
         res.status(401).redirect('/students/signup');

@@ -119,8 +119,9 @@ server.get('/students/confirmation', (req, res) => {
         delete (<any>req).session.register;
         const user =  (<any>req).session.confirm;
         mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY);
+        res.clearCookie('name');
     } else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/');
     }    
 });
 
@@ -139,7 +140,7 @@ server.get('/students/acception', (req, res) => {
             }
         });
         mail.sendAcceptionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
-        res.status(201).redirect('');
+        res.status(201).redirect('/');
     } else {
         res.status(401).redirect('/students/signup');
     }
@@ -148,7 +149,7 @@ server.get('/students/acception', (req, res) => {
 server.get('/students/rejection', (req, res) => {
     if ((<any>req).session.confirm && req.query.decision === process.env.DECISION_KEY) {
         mail.sendRejectionMessage((<any>req).session.confirm.email, (<any>req).session.confirm.name);
-        res.status(201).redirect('');
+        res.status(201).redirect('/');
     } else {
         res.status(401).redirect('/students/signup');
     }
