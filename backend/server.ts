@@ -149,10 +149,11 @@ server.get('/students/rejection', (req, res) => {
         pool.query(deletee, (err) => {
             if (err) {
                 res.status(500).send({ error: 'Not deleted' });
+            } else {
+                mail.sendRejectionMessage(req.query.email, req.query.name);
+                res.status(201).redirect('/');
             }
         });
-        mail.sendRejectionMessage(req.query.email, req.query.name);
-        res.status(201).redirect('/');
     } else {
         res.status(401).redirect('/students/signup');
     }

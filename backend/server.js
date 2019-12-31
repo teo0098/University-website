@@ -193,9 +193,11 @@ server.get('/students/rejection', function (req, res) {
             if (err) {
                 res.status(500).send({ error: 'Not deleted' });
             }
+            else {
+                sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
+                res.status(201).redirect('/');
+            }
         });
-        sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
-        res.status(201).redirect('/');
     }
     else {
         res.status(401).redirect('/students/signup');
