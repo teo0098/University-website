@@ -188,17 +188,14 @@ server.get('/students/acception', function (req, res) {
 });
 server.get('/students/rejection', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
-        var deletee = "DELETE FROM students WHERE student_PIN=?";
-        dbconnection_1.default.query(deletee, [req.body.pin], function (err) {
+        var deletee = "DELETE FROM students WHERE student_PIN=\"" + req.query.pin + "\"";
+        dbconnection_1.default.query(deletee, function (err) {
             if (err) {
                 res.status(500).send({ error: 'Not deleted' });
             }
-            else {
-                res.send({ pin: req.query.pin });
-            }
         });
-        //mail.sendRejectionMessage(req.query.email, req.query.name);
-        //res.status(201).redirect('/');
+        sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
+        res.status(201).redirect('/');
     }
     else {
         res.status(401).redirect('/students/signup');
