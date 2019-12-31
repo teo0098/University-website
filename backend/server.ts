@@ -122,18 +122,6 @@ server.post('/students/registration', (req, res) => {
     });
 });
 
-server.get('/students/confirmation', (req, res) => {
-    if (req.query.confirm === process.env.CONFIRM_KEY) {
-        const user = req.query;
-        res.status(200).render('confirmation', {
-            name: user.name
-        });
-        mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email);
-    } else {
-        res.status(401).redirect('/students/signup');
-    }    
-});
-
 server.get('/students/acception', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
         mail.sendAcceptionMessage(req.query.email, req.query.name);
