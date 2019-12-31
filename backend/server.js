@@ -165,18 +165,6 @@ server.post('/students/registration', function (req, res) {
         });
     }); });
 });
-server.get('/students/confirmation', function (req, res) {
-    if (req.query.confirm === process.env.CONFIRM_KEY) {
-        var user = req.query;
-        res.status(200).render('confirmation', {
-            name: user.name
-        });
-        sendEmail_1.default.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email);
-    }
-    else {
-        res.status(401).redirect('/students/signup');
-    }
-});
 server.get('/students/acception', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
@@ -202,6 +190,9 @@ server.get('/students/rejection', function (req, res) {
     else {
         res.status(401).redirect('/students/signup');
     }
+});
+server.get('/students/signin', function (req, res) {
+    res.render('signin');
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

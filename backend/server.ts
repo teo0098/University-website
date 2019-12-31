@@ -147,6 +147,10 @@ server.get('/students/rejection', (req, res) => {
     }
 });
 
+server.get('/students/signin', (req, res) => {
+    res.render('signin');
+});
+
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
