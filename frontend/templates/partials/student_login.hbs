@@ -1,0 +1,17 @@
+<div class="signup__div">
+    <section class="signup__data">
+        <h4 class="signup__h4">Email:</h4>
+        <input type="email" name="email" id="email" class="signup__input">
+    </section>
+    <section class="signup__data">
+        <h4 class="signup__h4">Password:</h4>
+        <input type="password" name="password" id="password" class="signup__input">
+    </section>
+    <a href="#" class="signin__forgot">Forgot your password?</a>
+</div>
+{{#if errorMessage}}
+    <i class="fas fa-exclamation-triangle signup__errorIcon"></i>
+    <h2 class="signup__errorName">Unable to connect to the database, please try again later</h2>
+{{else}}
+    <button class="signup__btn">Sign in</button>
+{{/if}}

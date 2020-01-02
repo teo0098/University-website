@@ -309,5 +309,36 @@
     font-size: 8vw;
   }
 }
+.signup__form {
+  min-width: 20vw;
+}
 
-/*# sourceMappingURL=signup.css.map */
+.signup__div {
+  width: 20vw;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup__data {
+  width: 100%;
+}
+
+.signup__btn:hover::after {
+  content: "Sign in";
+}
+
+.signin__forgot {
+  color: #FF7F50;
+  margin: 2vh 0;
+  letter-spacing: 0.1vw;
+}
+
+@media (max-width: 800px) {
+  .signup__form, .signup__div {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=signin.css.map */

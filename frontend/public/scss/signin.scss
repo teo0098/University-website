@@ -1,0 +1,34 @@
+@import 'signup';
+@import '_partial1';
+
+.signup__form {
+    min-width: 20vw;
+}
+
+.signup__div {
+    width: 20vw;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup__data {
+    width: 100%;
+}
+
+.signup__btn:hover::after {
+    content: "Sign in";
+}
+
+.signin__forgot {
+    color: $color7;
+    margin: 2vh 0;
+    letter-spacing: 0.1vw;
+}
+
+@media (max-width: 800px) {
+    .signup__form, .signup__div {
+        width: 100%;
+    }
+}

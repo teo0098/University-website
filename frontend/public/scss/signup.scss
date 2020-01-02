@@ -130,17 +130,13 @@
 }
 
 @media (max-width: 800px) {
-    .signup__form {
+    .signup__form, .signup__data {
         width: 100%;
     }
 
     .signup__div {
         flex-wrap: nowrap;
         flex-direction: column;
-        width: 100%;
-    }
-
-    .signup__data {
         width: 100%;
     }
 

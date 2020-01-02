@@ -138,18 +138,10 @@ server.get('/students/rejection', (req, res) => {
             if (err) {
                 res.status(500).send({ error: 'Not deleted' });
             } else {
-<<<<<<< HEAD
                 mail.sendRejectionMessage(req.query.email, req.query.name);
                 res.status(201).redirect('/');
             }
         });
-=======
-                res.send({ pin: req.body.pin });
-            }
-        });
-        //mail.sendRejectionMessage(req.query.email, req.query.name);
-        //res.status(201).redirect('/');
->>>>>>> 304c85c608c9f77776f872fb4669cdce434b6e8e
     } else {
         res.status(401).redirect('/students/signup');
     }
@@ -157,6 +149,10 @@ server.get('/students/rejection', (req, res) => {
 
 server.get('/students/signin', (req, res) => {
     res.render('signin');
+});
+
+server.post('/students/login', (req, res) => {
+    
 });
 
 server.listen(port, () => {
