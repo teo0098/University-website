@@ -166,16 +166,16 @@ server.post('/students/registration', function (req, res) {
     }); });
 });
 server.get('/students/acception', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var update, selectID, query1, result, insert, query2, error_1;
+    var update, selectID, query1, result, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!(req.query.decision === process.env.DECISION_KEY)) return [3 /*break*/, 7];
+                if (!(req.query.decision === process.env.DECISION_KEY)) return [3 /*break*/, 6];
                 update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
                 selectID = "SELECT * FROM students WHERE student_PIN=?;\n                          SELECT * FROM majors WHERE major_name=?";
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 4, , 5]);
                 return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
             case 2:
                 query1 = _a.sent();
@@ -184,26 +184,17 @@ server.get('/students/acception', function (req, res) { return __awaiter(void 0,
                 return [4 /*yield*/, dbconnection_1.default.query(selectID, [req.query.pin, req.query.major])];
             case 3:
                 result = _a.sent();
-                if (!result)
-                    throw 'Unable to select';
-                insert = "INSERT INTO students_majors VALUES(NULL, " + result[1].major_id + ", " + result[0].student_id + ", 1)";
-                return [4 /*yield*/, dbconnection_1.default.query(insert)];
+                res.send({ result: result });
+                return [3 /*break*/, 5];
             case 4:
-                query2 = _a.sent();
-                if (!query2)
-                    throw 'Unable to insert';
-                //mail.sendAcceptionMessage(req.query.email, req.query.name);
-                res.status(201).send({ success: 'Accepted' });
-                return [3 /*break*/, 6];
-            case 5:
                 error_1 = _a.sent();
                 res.status(404).send({ error: error_1 });
-                return [3 /*break*/, 6];
-            case 6: return [3 /*break*/, 8];
-            case 7:
+                return [3 /*break*/, 5];
+            case 5: return [3 /*break*/, 7];
+            case 6:
                 res.status(401).redirect('/students/signup');
-                _a.label = 8;
-            case 8: return [2 /*return*/];
+                _a.label = 7;
+            case 7: return [2 /*return*/];
         }
     });
 }); });
