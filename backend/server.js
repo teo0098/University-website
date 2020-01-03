@@ -168,7 +168,7 @@ server.post('/students/registration', function (req, res) {
 server.get('/students/acception', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
-        dbconnection_1.default.query(update, ["" + req.query.pin], function (err, result) {
+        dbconnection_1.default.query(update, ["" + req.query.pin], function (err) {
             if (err) {
                 res.status(404).send({ error: 'Not updated' });
             }
@@ -179,18 +179,16 @@ server.get('/students/acception', function (req, res) {
                         res.status(404).send({ error: 'No id selected' });
                     }
                     else {
-                        res.send({ result: result });
-                        /*
-                        const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
-                        pool.query(insert, (err, result) => {
+                        var insert = "INSERT INTO students_majors VALUES(NULL, " + result[1][0].major_id + ", " + result[0][0].student_id + ", 1)";
+                        dbconnection_1.default.query(insert, function (err) {
                             if (err) {
                                 res.status(404).send({ error: 'Not inserted' });
-                            } else {
-                                mail.sendAcceptionMessage(req.query.email, req.query.name);
+                            }
+                            else {
+                                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
                                 res.status(201).send({ success: 'Accepted' });
                             }
-                        })
-                        */
+                        });
                     }
                 });
             }
