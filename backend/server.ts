@@ -129,6 +129,7 @@ server.get('/students/acception', async (req, res) => {
                           SELECT * FROM majors WHERE major_name=?`;
         try {
             await pool.query(update, [`${req.query.pin}`]);
+            res.send({ major: req.query.major });
             const result = await pool.query(selectID, [`${req.query.pin}`, `${req.query.major}`]);
             res.send({ result });
             /*

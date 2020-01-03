@@ -179,6 +179,7 @@ server.get('/students/acception', function (req, res) { return __awaiter(void 0,
                 return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
             case 2:
                 _a.sent();
+                res.send({ major: req.query.major });
                 return [4 /*yield*/, dbconnection_1.default.query(selectID, ["" + req.query.pin, "" + req.query.major])];
             case 3:
                 result = _a.sent();
