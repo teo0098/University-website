@@ -122,23 +122,32 @@ server.post('/students/registration', (req, res) => {
     });
 });
 
-server.get('/students/acception', async (req, res) => {
+server.get('/students/acception', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
         const update = `UPDATE students SET student_accepted='YES' WHERE student_PIN=?`;
-        const select1 = `SELECT * FROM students WHERE student_PIN=?`;
-        const select2 = `SELECT * FROM majors WHERE major_name=?`;
-        try {
-            await pool.query(update, [`${req.query.pin}`]);
-            const student = await pool.query(select1, [req.query.pin]);
-            res.send({ student });
-            const major = await pool.query(select2, [`${req.query.major}`]);
-            const insert = `INSERT INTO students_majors VALUES(NULL, ${major[0].major_id}, ${student[0].student_id}, 1)`;
-            await pool.query(insert);
-            mail.sendAcceptionMessage(req.query.email, req.query.name);
-            res.status(201).send({ success: 'Accepted' });
-        } catch (error) {
-            res.status(404).send({ error: 'Unable to insert or select or update' });
-        }
+        pool.query(update, [`${req.query.pin}`], (err, result) => {
+            if (err) {
+                res.status(404).send({ error: 'Not updated' });
+            } else {
+                const selectID = `SELECT * FROM students WHERE student_PIN=?;
+                          SELECT * FROM majors WHERE major_name=?`;
+                pool.query(selectID, [req.query.pin, req.query.major], (err, result) => {
+                    if (err) {
+                        res.status(404).send({ error: 'No id selected' });
+                    } else {
+                        const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
+                        pool.query(insert, (err, result) => {
+                            if (err) {
+                                res.status(404).send({ error: 'Not inserted' });
+                            } else {
+                                mail.sendAcceptionMessage(req.query.email, req.query.name);
+                                res.status(201).send({ success: 'Accepted' });
+                            }
+                        })
+                    }
+                });
+            }
+        });
     } else {
         res.status(401).redirect('/students/signup');
     }

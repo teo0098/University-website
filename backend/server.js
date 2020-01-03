@@ -165,47 +165,39 @@ server.post('/students/registration', function (req, res) {
         });
     }); });
 });
-server.get('/students/acception', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var update, select1, select2, student, major, insert, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (!(req.query.decision === process.env.DECISION_KEY)) return [3 /*break*/, 8];
-                update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
-                select1 = "SELECT * FROM students WHERE student_PIN=?";
-                select2 = "SELECT * FROM majors WHERE major_name=?";
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 6, , 7]);
-                return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
-            case 2:
-                _a.sent();
-                return [4 /*yield*/, dbconnection_1.default.query(select1, [req.query.pin])];
-            case 3:
-                student = _a.sent();
-                res.send({ student: student });
-                return [4 /*yield*/, dbconnection_1.default.query(select2, ["" + req.query.major])];
-            case 4:
-                major = _a.sent();
-                insert = "INSERT INTO students_majors VALUES(NULL, " + major[0].major_id + ", " + student[0].student_id + ", 1)";
-                return [4 /*yield*/, dbconnection_1.default.query(insert)];
-            case 5:
-                _a.sent();
-                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
-                res.status(201).send({ success: 'Accepted' });
-                return [3 /*break*/, 7];
-            case 6:
-                error_1 = _a.sent();
-                res.status(404).send({ error: 'Unable to insert or select or update' });
-                return [3 /*break*/, 7];
-            case 7: return [3 /*break*/, 9];
-            case 8:
-                res.status(401).redirect('/students/signup');
-                _a.label = 9;
-            case 9: return [2 /*return*/];
-        }
-    });
-}); });
+server.get('/students/acception', function (req, res) {
+    if (req.query.decision === process.env.DECISION_KEY) {
+        var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
+        dbconnection_1.default.query(update, ["" + req.query.pin], function (err, result) {
+            if (err) {
+                res.status(404).send({ error: 'Not updated' });
+            }
+            else {
+                var selectID = "SELECT * FROM students WHERE student_PIN=?;\n                          SELECT * FROM majors WHERE major_name=?";
+                dbconnection_1.default.query(selectID, [req.query.pin, req.query.major], function (err, result) {
+                    if (err) {
+                        res.status(404).send({ error: 'No id selected' });
+                    }
+                    else {
+                        var insert = "INSERT INTO students_majors VALUES(NULL, " + result[1].major_id + ", " + result[0].student_id + ", 1)";
+                        dbconnection_1.default.query(insert, function (err, result) {
+                            if (err) {
+                                res.status(404).send({ error: 'Not inserted' });
+                            }
+                            else {
+                                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
+                                res.status(201).send({ success: 'Accepted' });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+    else {
+        res.status(401).redirect('/students/signup');
+    }
+});
 server.get('/students/rejection', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         var deletee = "DELETE FROM students WHERE student_PIN=?";
@@ -232,7 +224,7 @@ server.get('/students/signin', function (req, res) {
 server.post('/students/login', function (req, res) {
     var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
     dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, error_2;
+        var match, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -254,8 +246,8 @@ server.post('/students/login', function (req, res) {
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_2 = _a.sent();
-                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_2));
+                    error_1 = _a.sent();
+                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_1));
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
