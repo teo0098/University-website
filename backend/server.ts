@@ -128,20 +128,14 @@ server.get('/students/acception', async (req, res) => {
         const selectID = `SELECT * FROM students WHERE student_PIN=?;
                           SELECT * FROM majors WHERE major_name=?`;
         try {
-            const query1 = await pool.query(update, [`${req.query.pin}`]);
-            if (!query1) throw 'Unable to update';
-            const result = await pool.query(selectID, [req.query.pin, req.query.major]);
-            res.send({ result });
-            /*
-            if (!result) throw 'Unable to select';
+            await pool.query(update, [`${req.query.pin}`]);
+            const result = await pool.query(selectID, [`${req.query.pin}`, `${req.query.major}`]);
             const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
-            const query2 = await pool.query(insert);
-            if (!query2) throw 'Unable to insert';
-            //mail.sendAcceptionMessage(req.query.email, req.query.name);
+            await pool.query(insert);
+            mail.sendAcceptionMessage(req.query.email, req.query.name);
             res.status(201).send({ success: 'Accepted' });
-            */
         } catch (error) {
-            res.status(404).send({ error });
+            res.status(404).send({ error: 'Unable to insert or select or update' });
         }
     } else {
         res.status(401).redirect('/students/signup');
