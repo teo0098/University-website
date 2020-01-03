@@ -183,6 +183,7 @@ server.get('/students/acception', function (req, res) { return __awaiter(void 0,
                 return [4 /*yield*/, dbconnection_1.default.query(select1, ["" + req.query.pin])];
             case 3:
                 student = _a.sent();
+                res.send({ student: student });
                 return [4 /*yield*/, dbconnection_1.default.query(select2, ["" + req.query.major])];
             case 4:
                 major = _a.sent();

@@ -130,6 +130,7 @@ server.get('/students/acception', async (req, res) => {
         try {
             await pool.query(update, [`${req.query.pin}`]);
             const student = await pool.query(select1, [`${req.query.pin}`]);
+            res.send({ student });
             const major = await pool.query(select2, [`${req.query.major}`]);
             const insert = `INSERT INTO students_majors VALUES(NULL, ${major[0].major_id}, ${student[0].student_id}, 1)`;
             await pool.query(insert);
