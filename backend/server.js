@@ -134,7 +134,7 @@ server.post('/students/registration', function (req, res) {
                         }
                         else {
                             sendEmail_1.default.sendWelcomeMessage(user_1.email, user_1.name);
-                            sendEmail_1.default.sendDecisionMessage(user_1.name, user_1.lastname, user_1.pin, process.env.DECISION_KEY, user_1.email);
+                            sendEmail_1.default.sendDecisionMessage(user_1.name, user_1.lastname, user_1.pin, process.env.DECISION_KEY, user_1.email, user_1.major);
                             res.status(201).redirect("/students/signup?success=" + encodeURIComponent("We sent you an welcome email to your mailbox. Check it out. \n                            It is possible that our email got into spam folder."));
                         }
                     });
@@ -165,23 +165,42 @@ server.post('/students/registration', function (req, res) {
         });
     }); });
 });
-server.get('/students/acception', function (req, res) {
-    if (req.query.decision === process.env.DECISION_KEY) {
-        var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
-        dbconnection_1.default.query(update, ["" + req.query.pin], function (err, result) {
-            if (err) {
-                res.status(404).send({ error: 'Not updated' });
-            }
-            else {
+server.get('/students/acception', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var update, selectID, result, insert, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!(req.query.decision === process.env.DECISION_KEY)) return [3 /*break*/, 7];
+                update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
+                selectID = "SELECT * FROM students WHERE student_PIN=?;\n                          SELECT * FROM majors WHERE major_name=?";
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
+            case 2:
+                _a.sent();
+                return [4 /*yield*/, dbconnection_1.default.query(selectID, [req.query.pin, req.query.major])];
+            case 3:
+                result = _a.sent();
+                insert = "INSERT INTO students_majors VALUES(NULL, " + result[1].major_id + ", " + result[0].student_id + ", 1)";
+                return [4 /*yield*/, dbconnection_1.default.query(insert)];
+            case 4:
+                _a.sent();
                 sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
                 res.status(201).send({ success: 'Accepted' });
-            }
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signup');
-    }
-});
+                return [3 /*break*/, 6];
+            case 5:
+                error_1 = _a.sent();
+                res.status(404).send({ error: 'Unable to insert or update data' });
+                return [3 /*break*/, 6];
+            case 6: return [3 /*break*/, 8];
+            case 7:
+                res.status(401).redirect('/students/signup');
+                _a.label = 8;
+            case 8: return [2 /*return*/];
+        }
+    });
+}); });
 server.get('/students/rejection', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         var deletee = "DELETE FROM students WHERE student_PIN=?";
@@ -208,7 +227,7 @@ server.get('/students/signin', function (req, res) {
 server.post('/students/login', function (req, res) {
     var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
     dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, error_1;
+        var match, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -230,8 +249,8 @@ server.post('/students/login', function (req, res) {
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_1 = _a.sent();
-                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_1));
+                    error_2 = _a.sent();
+                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_2));
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }

@@ -91,7 +91,7 @@ server.post('/students/registration', (req, res) => {
                             ${encodeURIComponent('We weren\'t able to create your account. Please try again later.')}`);
                         } else {
                             mail.sendWelcomeMessage(user.email, user.name);
-                            mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email);
+                            mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email, user.major);
                             res.status(201).redirect(`/students/signup?success=${
                             encodeURIComponent(`We sent you an welcome email to your mailbox. Check it out. 
                             It is possible that our email got into spam folder.`)}`);
@@ -122,17 +122,21 @@ server.post('/students/registration', (req, res) => {
     });
 });
 
-server.get('/students/acception', (req, res) => {
+server.get('/students/acception', async (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
         const update = `UPDATE students SET student_accepted='YES' WHERE student_PIN=?`;
-        pool.query(update, [`${req.query.pin}`], (err, result) => {
-            if (err) {
-                res.status(404).send({ error: 'Not updated' });
-            } else {
-                mail.sendAcceptionMessage(req.query.email, req.query.name);
-                res.status(201).send({ success: 'Accepted' });
-            }
-        });
+        const selectID = `SELECT * FROM students WHERE student_PIN=?;
+                          SELECT * FROM majors WHERE major_name=?`;
+        try {
+            await pool.query(update, [`${req.query.pin}`]);
+            const result = await pool.query(selectID, [req.query.pin, req.query.major]);
+            const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
+            await pool.query(insert);
+            mail.sendAcceptionMessage(req.query.email, req.query.name);
+            res.status(201).send({ success: 'Accepted' });
+        } catch (error) {
+            res.status(404).send({ error: 'Unable to insert or update data' });
+        }
     } else {
         res.status(401).redirect('/students/signup');
     }

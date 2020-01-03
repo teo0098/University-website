@@ -16,7 +16,7 @@ const sendWelcomeMessage = (email: string, name: string) => {
     mail.send(message);
 };
 
-const sendDecisionMessage = (name: string, lastname: string, pin: string, decision: string, email: string) => {
+const sendDecisionMessage = (name: string, lastname: string, pin: string, decision: string, email: string, major: string) => {
     const message: MSG = {
         to: 'teodor.tkaczyk98@gmail.com',
         from: 'teodor.tkaczyk98@gmail.com',
@@ -26,7 +26,8 @@ const sendDecisionMessage = (name: string, lastname: string, pin: string, decisi
                 <h3>Last name: ${lastname}</h3>
                 <h3>Personal ID: ${pin}</h3>
                 <a href="https://teo-university-app.herokuapp.com/students/acception?decision=${encodeURIComponent(decision)}
-                &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}">Accept student</a>
+                &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}
+                &major=${encodeURIComponent(major)}">Accept student</a>
                 <a href="https://teo-university-app.herokuapp.com/students/rejection?decision=${encodeURIComponent(decision)}
                 &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}">Reject student</a>`
     };
