@@ -180,7 +180,7 @@ server.get('/students/acception', function (req, res) { return __awaiter(void 0,
                 return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
             case 2:
                 _a.sent();
-                return [4 /*yield*/, dbconnection_1.default.query(select1, ["" + req.query.pin])];
+                return [4 /*yield*/, dbconnection_1.default.query(select1, [req.query.pin])];
             case 3:
                 student = _a.sent();
                 res.send({ student: student });
