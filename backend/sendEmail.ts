@@ -26,7 +26,7 @@ const sendDecisionMessage = (name: string, lastname: string, pin: string, decisi
                 <h3>Last name: ${lastname}</h3>
                 <h3>Personal ID: ${pin}</h3>
                 <a href="https://teo-university-app.herokuapp.com/students/acception?decision=${encodeURIComponent(decision)}
-                &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}">Accept student</a>
+                &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}">Accept student</a>
                 <a href="https://teo-university-app.herokuapp.com/students/rejection?decision=${encodeURIComponent(decision)}
                 &email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}">Reject student</a>`
     };

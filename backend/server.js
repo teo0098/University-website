@@ -168,7 +168,7 @@ server.post('/students/registration', function (req, res) {
 server.get('/students/acception', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
-        res.status(201).redirect('/');
+        res.status(201).send({ success: 'Accepted' });
     }
     else {
         res.status(401).redirect('/students/signup');
@@ -183,7 +183,7 @@ server.get('/students/rejection', function (req, res) {
             }
             else {
                 sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
-                res.status(201).redirect('/');
+                res.status(201).send({ success: 'Deleted' });
             }
         });
     }
@@ -192,9 +192,43 @@ server.get('/students/rejection', function (req, res) {
     }
 });
 server.get('/students/signin', function (req, res) {
-    res.render('signin');
+    res.status(200).render('signin', {
+        error: req.query.error,
+        errorMessage: errorMessage
+    });
 });
 server.post('/students/login', function (req, res) {
+    var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
+    dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
+        var match, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    if (!err) return [3 /*break*/, 1];
+                    throw 'Unable to connect to the database, please try again later.';
+                case 1:
+                    if (!(result.length === 0)) return [3 /*break*/, 2];
+                    throw 'Email or password is incorrect';
+                case 2: return [4 /*yield*/, bcryptjs_1.default.compare(req.body.password, result[0].student_password)];
+                case 3:
+                    match = _a.sent();
+                    if (!match) {
+                        throw 'Email or password is incorrect';
+                    }
+                    else {
+                        res.send('LOGGED');
+                    }
+                    _a.label = 4;
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    error_1 = _a.sent();
+                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_1));
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

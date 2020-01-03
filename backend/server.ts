@@ -124,8 +124,15 @@ server.post('/students/registration', (req, res) => {
 
 server.get('/students/acception', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
-        mail.sendAcceptionMessage(req.query.email, req.query.name);
-        res.status(201).redirect('/');
+        const update = `UPDATE students SET student_accepted='YES' WHERE student_PIN=?`;
+        pool.query(update, [`"${req.query.pin}"`], (err, result) => {
+            if (err) {
+                res.status(404).send({ error: 'Not updated' });
+            } else {
+                mail.sendAcceptionMessage(req.query.email, req.query.name);
+                res.status(201).send({ success: 'Accepted' });
+            }
+        });
     } else {
         res.status(401).redirect('/students/signup');
     }
@@ -133,13 +140,13 @@ server.get('/students/acception', (req, res) => {
 
 server.get('/students/rejection', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
-        const deletee = `DELETE FROM students WHERE student_PIN="${req.query.pin}"`;
-        pool.query(deletee, (err) => {
+        const deletee = `DELETE FROM students WHERE student_PIN=?`;
+        pool.query(deletee, [`"${req.query.pin}"`], (err) => {
             if (err) {
-                res.status(500).send({ error: 'Not deleted' });
+                res.status(404).send({ error: 'Not deleted' });
             } else {
                 mail.sendRejectionMessage(req.query.email, req.query.name);
-                res.status(201).redirect('/');
+                res.status(201).send({ success: 'Deleted' });
             }
         });
     } else {
@@ -148,11 +155,34 @@ server.get('/students/rejection', (req, res) => {
 });
 
 server.get('/students/signin', (req, res) => {
-    res.render('signin');
+    res.status(200).render('signin', {
+        error: req.query.error,
+        errorMessage
+    });
 });
 
 server.post('/students/login', (req, res) => {
-    
+    const select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
+    pool.query(select, [req.body.email], async (err, result) => {
+        try {
+            if (err) {
+                throw 'Unable to connect to the database, please try again later.';
+            } else {
+                if (result.length === 0) {
+                    throw 'Email or password is incorrect';
+                } else {
+                    const match = await bcrypt.compare(req.body.password, result[0].student_password);
+                    if (!match) {
+                        throw 'Email or password is incorrect';
+                    } else {
+                        res.send('LOGGED')
+                    }
+                }
+            }
+        } catch (error) {
+            res.status(404).redirect(`/students/signin?error=${encodeURIComponent(error)}`);
+        }
+    });
 });
 
 server.listen(port, () => {
