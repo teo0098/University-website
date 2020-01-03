@@ -166,7 +166,7 @@ server.post('/students/registration', function (req, res) {
     }); });
 });
 server.get('/students/acception', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var update, selectID, result, insert, error_1;
+    var update, selectID, query1, result, insert, query2, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -178,20 +178,26 @@ server.get('/students/acception', function (req, res) { return __awaiter(void 0,
                 _a.trys.push([1, 5, , 6]);
                 return [4 /*yield*/, dbconnection_1.default.query(update, ["" + req.query.pin])];
             case 2:
-                _a.sent();
+                query1 = _a.sent();
+                if (!query1)
+                    throw 'Unable to update';
                 return [4 /*yield*/, dbconnection_1.default.query(selectID, [req.query.pin, req.query.major])];
             case 3:
                 result = _a.sent();
+                if (!result)
+                    throw 'Unable to select';
                 insert = "INSERT INTO students_majors VALUES(NULL, " + result[1].major_id + ", " + result[0].student_id + ", 1)";
                 return [4 /*yield*/, dbconnection_1.default.query(insert)];
             case 4:
-                _a.sent();
-                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
+                query2 = _a.sent();
+                if (!query2)
+                    throw 'Unable to insert';
+                //mail.sendAcceptionMessage(req.query.email, req.query.name);
                 res.status(201).send({ success: 'Accepted' });
                 return [3 /*break*/, 6];
             case 5:
                 error_1 = _a.sent();
-                res.status(404).send({ error: 'Unable to insert or update data' });
+                res.status(404).send({ error: error_1 });
                 return [3 /*break*/, 6];
             case 6: return [3 /*break*/, 8];
             case 7:
