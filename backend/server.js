@@ -179,16 +179,18 @@ server.get('/students/acception', function (req, res) {
                         res.status(404).send({ error: 'No id selected' });
                     }
                     else {
-                        var insert = "INSERT INTO students_majors VALUES(NULL, " + result[1].major_id + ", " + result[0].student_id + ", 1)";
-                        dbconnection_1.default.query(insert, function (err, result) {
+                        res.send({ result: result });
+                        /*
+                        const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
+                        pool.query(insert, (err, result) => {
                             if (err) {
                                 res.status(404).send({ error: 'Not inserted' });
-                            }
-                            else {
-                                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
+                            } else {
+                                mail.sendAcceptionMessage(req.query.email, req.query.name);
                                 res.status(201).send({ success: 'Accepted' });
                             }
-                        });
+                        })
+                        */
                     }
                 });
             }

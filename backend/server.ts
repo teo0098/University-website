@@ -135,6 +135,8 @@ server.get('/students/acception', (req, res) => {
                     if (err) {
                         res.status(404).send({ error: 'No id selected' });
                     } else {
+                        res.send({ result });
+                        /*
                         const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1].major_id}, ${result[0].student_id}, 1)`;
                         pool.query(insert, (err, result) => {
                             if (err) {
@@ -144,6 +146,7 @@ server.get('/students/acception', (req, res) => {
                                 res.status(201).send({ success: 'Accepted' });
                             }
                         })
+                        */
                     }
                 });
             }
