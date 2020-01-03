@@ -124,8 +124,8 @@ server.post('/students/registration', (req, res) => {
 
 server.get('/students/acception', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
-        const update = `UPDATE students SET student_accepted=YES WHERE student_PIN=?`;
-        pool.query(update, [`"${req.query.pin}"`], (err, result) => {
+        const update = `UPDATE students SET student_accepted='YES' WHERE student_PIN=?`;
+        pool.query(update, [`${req.query.pin}`], (err, result) => {
             if (err) {
                 res.status(404).send({ error: 'Not updated' });
             } else {
@@ -141,7 +141,7 @@ server.get('/students/acception', (req, res) => {
 server.get('/students/rejection', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
         const deletee = `DELETE FROM students WHERE student_PIN=?`;
-        pool.query(deletee, [`"${req.query.pin}"`], (err) => {
+        pool.query(deletee, [`${req.query.pin}`], (err) => {
             if (err) {
                 res.status(404).send({ error: 'Not deleted' });
             } else {

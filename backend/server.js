@@ -167,8 +167,8 @@ server.post('/students/registration', function (req, res) {
 });
 server.get('/students/acception', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
-        var update = "UPDATE students SET student_accepted=YES WHERE student_PIN=?";
-        dbconnection_1.default.query(update, ["\"" + req.query.pin + "\""], function (err, result) {
+        var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
+        dbconnection_1.default.query(update, ["" + req.query.pin], function (err, result) {
             if (err) {
                 res.status(404).send({ error: 'Not updated' });
             }
@@ -185,7 +185,7 @@ server.get('/students/acception', function (req, res) {
 server.get('/students/rejection', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         var deletee = "DELETE FROM students WHERE student_PIN=?";
-        dbconnection_1.default.query(deletee, ["\"" + req.query.pin + "\""], function (err) {
+        dbconnection_1.default.query(deletee, ["" + req.query.pin], function (err) {
             if (err) {
                 res.status(404).send({ error: 'Not deleted' });
             }
