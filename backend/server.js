@@ -83,21 +83,31 @@ server.get('', function (req, res) {
     });
 });
 server.get('/students', function (req, res) {
-    res.status(200).render('students');
+    if (req.session.logged) {
+        res.status(401).redirect('/students/panel');
+    }
+    else {
+        res.status(200).render('students');
+    }
 });
 server.get('/students/signup', function (req, res) {
-    res.status(200).render('signup', {
-        year: new Date().getFullYear() - 20,
-        maxYear: new Date().getFullYear() - 18,
-        minYear: new Date().getFullYear() - 70,
-        errorMessage: errorMessage,
-        majors: majors,
-        query: req.query.queryy,
-        pin: req.query.pin,
-        phone: req.query.phone,
-        email: req.query.email,
-        success: req.query.success || ''
-    });
+    if (req.session.logged) {
+        res.status(401).redirect('/students/panel');
+    }
+    else {
+        res.status(200).render('signup', {
+            year: new Date().getFullYear() - 20,
+            maxYear: new Date().getFullYear() - 18,
+            minYear: new Date().getFullYear() - 70,
+            errorMessage: errorMessage,
+            majors: majors,
+            query: req.query.queryy,
+            pin: req.query.pin,
+            phone: req.query.phone,
+            email: req.query.email,
+            success: req.query.success || ''
+        });
+    }
 });
 server.post('/students/registration', function (req, res) {
     var select = "SELECT * FROM students WHERE student_PIN=?;\n                    SELECT * FROM students WHERE student_phonenumber=?;\n                    SELECT * FROM students WHERE student_email=?";
@@ -168,20 +178,20 @@ server.post('/students/registration', function (req, res) {
 server.get('/students/acception', function (req, res) {
     if (req.query.decision === process.env.DECISION_KEY) {
         var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
-        dbconnection_1.default.query(update, ["" + req.query.pin], function (err) {
-            if (err) {
+        dbconnection_1.default.query(update, ["" + req.query.pin], function (err1) {
+            if (err1) {
                 res.status(404).send({ error: 'Not updated' });
             }
             else {
                 var selectID = "SELECT * FROM students WHERE student_PIN=?;\n                          SELECT * FROM majors WHERE major_name=?";
-                dbconnection_1.default.query(selectID, [req.query.pin, req.query.major], function (err, result) {
-                    if (err) {
+                dbconnection_1.default.query(selectID, [req.query.pin, req.query.major], function (err2, result) {
+                    if (err2) {
                         res.status(404).send({ error: 'No id selected' });
                     }
                     else {
                         var insert = "INSERT INTO students_majors VALUES(NULL, " + result[1][0].major_id + ", " + result[0][0].student_id + ", 1)";
-                        dbconnection_1.default.query(insert, function (err) {
-                            if (err) {
+                        dbconnection_1.default.query(insert, function (err3) {
+                            if (err3) {
                                 res.status(404).send({ error: 'Not inserted' });
                             }
                             else {
@@ -216,15 +226,20 @@ server.get('/students/rejection', function (req, res) {
     }
 });
 server.get('/students/signin', function (req, res) {
-    res.status(200).render('signin', {
-        error: req.query.error,
-        errorMessage: errorMessage
-    });
+    if (req.session.logged) {
+        res.status(401).redirect('/students/panel');
+    }
+    else {
+        res.status(200).render('signin', {
+            error: req.query.error,
+            errorMessage: errorMessage
+        });
+    }
 });
 server.post('/students/login', function (req, res) {
     var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
     dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, error_1;
+        var match, student, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -241,7 +256,9 @@ server.post('/students/login', function (req, res) {
                         throw 'Email or password is incorrect';
                     }
                     else {
-                        res.send('LOGGED');
+                        student = { name: result[0].student_name, lastname: result[0].student_lastname, email: result[0].student_email };
+                        req.session.logged = student;
+                        res.status(200).redirect('/students/panel');
                     }
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
@@ -253,6 +270,14 @@ server.post('/students/login', function (req, res) {
             }
         });
     }); });
+});
+server.get('/students/panel', function (req, res) {
+    if (req.session.logged) {
+        res.status(200).render('panel', {});
+    }
+    else {
+        res.status(401).redirect('/students/signup');
+    }
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

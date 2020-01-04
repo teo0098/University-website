@@ -45,22 +45,30 @@ server.get('', (req, res) => {
 });
 
 server.get('/students', (req, res) => {
-    res.status(200).render('students');
+    if ((<any>req).session.logged) {
+        res.status(401).redirect('/students/panel');
+    } else {
+        res.status(200).render('students');
+    }
 });
 
 server.get('/students/signup', (req, res) => {
-    res.status(200).render('signup', {
-        year: new Date().getFullYear() - 20,
-        maxYear: new Date().getFullYear() - 18,
-        minYear: new Date().getFullYear() - 70,
-        errorMessage,
-        majors,
-        query: req.query.queryy,
-        pin: req.query.pin,
-        phone: req.query.phone,
-        email: req.query.email,
-        success: req.query.success || ''
-    });
+    if ((<any>req).session.logged) {
+        res.status(401).redirect('/students/panel');
+    } else {
+        res.status(200).render('signup', {
+            year: new Date().getFullYear() - 20,
+            maxYear: new Date().getFullYear() - 18,
+            minYear: new Date().getFullYear() - 70,
+            errorMessage,
+            majors,
+            query: req.query.queryy,
+            pin: req.query.pin,
+            phone: req.query.phone,
+            email: req.query.email,
+            success: req.query.success || ''
+        });
+    }
 });
 
 server.post('/students/registration', (req, res) => {
@@ -125,19 +133,19 @@ server.post('/students/registration', (req, res) => {
 server.get('/students/acception', (req, res) => {
     if (req.query.decision === process.env.DECISION_KEY) {
         const update = `UPDATE students SET student_accepted='YES' WHERE student_PIN=?`;
-        pool.query(update, [`${req.query.pin}`], (err) => {
-            if (err) {
+        pool.query(update, [`${req.query.pin}`], (err1) => {
+            if (err1) {
                 res.status(404).send({ error: 'Not updated' });
             } else {
                 const selectID = `SELECT * FROM students WHERE student_PIN=?;
                           SELECT * FROM majors WHERE major_name=?`;
-                pool.query(selectID, [req.query.pin, req.query.major], (err, result) => {
-                    if (err) {
+                pool.query(selectID, [req.query.pin, req.query.major], (err2, result) => {
+                    if (err2) {
                         res.status(404).send({ error: 'No id selected' });
                     } else {
                         const insert = `INSERT INTO students_majors VALUES(NULL, ${result[1][0].major_id}, ${result[0][0].student_id}, 1)`;
-                        pool.query(insert, (err) => {
-                            if (err) {
+                        pool.query(insert, (err3) => {
+                            if (err3) {
                                 res.status(404).send({ error: 'Not inserted' });
                             } else {
                                 mail.sendAcceptionMessage(req.query.email, req.query.name);
@@ -170,10 +178,14 @@ server.get('/students/rejection', (req, res) => {
 });
 
 server.get('/students/signin', (req, res) => {
-    res.status(200).render('signin', {
-        error: req.query.error,
-        errorMessage
-    });
+    if ((<any>req).session.logged) {
+        res.status(401).redirect('/students/panel');
+    } else {
+        res.status(200).render('signin', {
+            error: req.query.error,
+            errorMessage
+        });
+    }
 });
 
 server.post('/students/login', (req, res) => {
@@ -190,7 +202,9 @@ server.post('/students/login', (req, res) => {
                     if (!match) {
                         throw 'Email or password is incorrect';
                     } else {
-                        res.send('LOGGED')
+                        const student = { name: result[0].student_name, lastname: result[0].student_lastname, email: result[0].student_email };
+                        (<any>req).session.logged = student;
+                        res.status(200).redirect('/students/panel');
                     }
                 }
             }
@@ -198,6 +212,16 @@ server.post('/students/login', (req, res) => {
             res.status(404).redirect(`/students/signin?error=${encodeURIComponent(error)}`);
         }
     });
+});
+
+server.get('/students/panel', (req, res) => {
+    if ((<any>req).session.logged) {
+        res.status(200).render('panel', {
+            
+        });
+    } else {
+        res.status(401).redirect('/students/signup');
+    }
 });
 
 server.listen(port, () => {
