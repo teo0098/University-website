@@ -202,12 +202,21 @@ server.post('/students/login', (req, res) => {
                     if (!match) {
                         throw 'Email or password is incorrect';
                     } else {
-                        const student = { 
-                            name: result[0].student_name, lastname: result[0].student_lastname, sex: result[0].student_sex,
-                            pin: result[0].student_PIN, birthdate: result[0].student_birthdate, phone: result[0].student_phonenumber,
-                            email: result[0].student_email, zipcode: result[0].student_zipcode, location: result[0].student_location,
-                            apartment: result[0].student_apartmentnumber, street: result[0].student_street
-                         };
+                        const date = new Date(result[0].student_birthdate);
+                        const dateOfBirth = date.toLocaleDateString();
+                        const student = [ 
+                            {key: 'Name', value: result[0].student_name},
+                            {key: 'Last name', value: result[0].student_lastname}, 
+                            {key: 'Sex', value: result[0].student_sex},
+                            {key: 'Personal identity number', value: result[0].student_PIN}, 
+                            {key: 'Date of birth', value: dateOfBirth}, 
+                            {key: 'Phone number', value: result[0].student_phonenumber},
+                            {key: 'Email', value: result[0].student_email}, 
+                            {key: 'Postal code', value: result[0].student_zipcode}, 
+                            {key: 'Living place', value: result[0].student_location},
+                            {key: 'Apartment/home number', value: result[0].student_apartmentnumber}, 
+                            {key: 'Street', value: result[0].student_street}
+                        ];
                         (<any>req).session.logged = student;
                         res.status(200).redirect('/students/panel');
                     }
@@ -221,12 +230,8 @@ server.post('/students/login', (req, res) => {
 
 server.get('/students/panel', (req, res) => {
     if ((<any>req).session.logged) {
-        let student_data = [];
-        const student_keys = Object.keys((<any>req).session.logged);
-        const student = (<any>req).session.logged;
-        student_keys.forEach(value => student_data.push([value, student[value]]));
         res.status(200).render('panel', {
-            student_data
+            student_data: (<any>req).session.logged
         });
     } else {
         res.status(401).redirect('/students/signup');

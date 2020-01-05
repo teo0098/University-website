@@ -14,17 +14,17 @@
     {{>menu2}}
     <div class="panel">
         <div class="panel__wrapper">
-            <i class="fas fa-user-graduate panel__studentIcon"></i>
-            <h4 class="panel__student">{{student_data.[0].[1]}} {{student_data.[1].[1]}}</h4>
-            <i class="fas fa-caret-down"></i>
+            <i class="fas fa-user-graduate panel__studentIcon panel__icon"></i>
+            <h4 class="panel__student panel__student--h4">{{student_data.[0].value}} {{student_data.[1].value}}</h4>
+            <i class="fas fa-caret-down panel__arrowIcon panel__icon"></i>
         </div>
         <div class="panel__wrapper">
             <a href="#" class="panel__student">Log me out</a>
-            <i class="fas fa-sign-out-alt panel__outIcon"></i>
+            <i class="fas fa-sign-out-alt panel__outIcon panel__icon"></i>
         </div>
     </div>
     {{#each student_data as |data|}}
-        <h2>{{data.[0]}}: {{data.[1]}}</h2>
+        <h2>{{data.key}}: {{data.value}}</h2>
     {{/each}}
     <script src="/src/students.js"></script>
 </body>

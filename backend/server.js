@@ -239,7 +239,7 @@ server.get('/students/signin', function (req, res) {
 server.post('/students/login', function (req, res) {
     var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
     dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, student, error_1;
+        var match, date, dateOfBirth, student, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -256,12 +256,21 @@ server.post('/students/login', function (req, res) {
                         throw 'Email or password is incorrect';
                     }
                     else {
-                        student = {
-                            name: result[0].student_name, lastname: result[0].student_lastname, sex: result[0].student_sex,
-                            pin: result[0].student_PIN, birthdate: result[0].student_birthdate, phone: result[0].student_phonenumber,
-                            email: result[0].student_email, zipcode: result[0].student_zipcode, location: result[0].student_location,
-                            apartment: result[0].student_apartmentnumber, street: result[0].student_street
-                        };
+                        date = new Date(result[0].student_birthdate);
+                        dateOfBirth = date.toLocaleDateString();
+                        student = [
+                            { key: 'Name', value: result[0].student_name },
+                            { key: 'Last name', value: result[0].student_lastname },
+                            { key: 'Sex', value: result[0].student_sex },
+                            { key: 'Personal identity number', value: result[0].student_PIN },
+                            { key: 'Date of birth', value: dateOfBirth },
+                            { key: 'Phone number', value: result[0].student_phonenumber },
+                            { key: 'Email', value: result[0].student_email },
+                            { key: 'Postal code', value: result[0].student_zipcode },
+                            { key: 'Living place', value: result[0].student_location },
+                            { key: 'Apartment/home number', value: result[0].student_apartmentnumber },
+                            { key: 'Street', value: result[0].student_street }
+                        ];
                         req.session.logged = student;
                         res.status(200).redirect('/students/panel');
                     }
@@ -278,12 +287,8 @@ server.post('/students/login', function (req, res) {
 });
 server.get('/students/panel', function (req, res) {
     if (req.session.logged) {
-        var student_data_1 = [];
-        var student_keys = Object.keys(req.session.logged);
-        var student_1 = req.session.logged;
-        student_keys.forEach(function (value) { return student_data_1.push([value, student_1[value]]); });
         res.status(200).render('panel', {
-            student_data: student_data_1
+            student_data: req.session.logged
         });
     }
     else {

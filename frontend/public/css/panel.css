@@ -204,10 +204,17 @@
     border-radius: 0.5vh;
   }
 }
+body {
+  background: #f1f1f1;
+}
+
 .panel {
   display: flex;
   justify-content: space-between;
   background: #f1f1f1;
+  color: #0e0e0e;
+  align-items: center;
+  border-bottom: 0.1vh solid #0e0e0e;
 }
 
 .panel__wrapper {
@@ -217,8 +224,30 @@
   align-items: center;
 }
 
+.panel__icon, .panel__student {
+  color: #0e0e0e;
+}
+
+.panel__studentIcon {
+  font-size: 1.5vw;
+}
+
+.panel__outIcon {
+  font-size: 1.2vw;
+}
+
+.panel__arrowIcon {
+  font-size: 2vw;
+  cursor: pointer;
+}
+
 .panel__student {
   margin: 0 1vw;
+  letter-spacing: 0.1vw;
+}
+
+.panel__student--h4 {
+  text-transform: capitalize;
 }
 
 /*# sourceMappingURL=panel.css.map */

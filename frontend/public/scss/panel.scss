@@ -2,10 +2,17 @@
 @import 'menu2';
 @import '_partial1';
 
+body {
+    background: $color5;
+}
+
 .panel {
     display: flex;
     justify-content: space-between;
     background: $color5;
+    color: $color2;
+    align-items: center;
+    border-bottom: 0.1vh solid $color2;
 }
 
 .panel__wrapper {
@@ -15,6 +22,28 @@
     align-items: center;
 }
 
+.panel__icon, .panel__student {
+    color: $color2;
+}
+
+.panel__studentIcon {
+    font-size: 1.5vw;
+}
+
+.panel__outIcon {
+    font-size: 1.2vw;
+}
+
+.panel__arrowIcon {
+    font-size: 2vw;
+    cursor: pointer;
+}
+
 .panel__student {
     margin: 0 1vw;
+    letter-spacing: 0.1vw;
+}
+
+.panel__student--h4 {
+    text-transform: capitalize;
 }
