@@ -28,7 +28,7 @@ pool.getConnection((error, connection) => {
     }
 });
 
-server.use(session( { secret: process.env.SECRET_SESSION_KEY, maxAge: 86400000 * 7 } ));
+server.use(session( { secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false ,maxAge: 86400000 * 7 } ));
 server.use(cookie());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
@@ -202,7 +202,12 @@ server.post('/students/login', (req, res) => {
                     if (!match) {
                         throw 'Email or password is incorrect';
                     } else {
-                        const student = { name: result[0].student_name, lastname: result[0].student_lastname, email: result[0].student_email };
+                        const student = { 
+                            name: result[0].student_name, lastname: result[0].student_lastname, sex: result[0].student_sex,
+                            pin: result[0].student_PIN, birthdate: result[0].student_birthdate, phone: result[0].student_phonenumber,
+                            email: result[0].student_email, zipcode: result[0].student_zipcode, location: result[0].student_location,
+                            apartment: result[0].student_apartmentnumber, street: result[0].student_street
+                         };
                         (<any>req).session.logged = student;
                         res.status(200).redirect('/students/panel');
                     }
@@ -216,8 +221,12 @@ server.post('/students/login', (req, res) => {
 
 server.get('/students/panel', (req, res) => {
     if ((<any>req).session.logged) {
+        let student_data = [];
+        const student_keys = Object.keys((<any>req).session.logged);
+        const student = (<any>req).session.logged;
+        student_keys.forEach(value => student_data.push([value, student[value]]));
         res.status(200).render('panel', {
-            
+            student_data
         });
     } else {
         res.status(401).redirect('/students/signup');

@@ -1,0 +1,20 @@
+@import 'styles';
+@import 'menu2';
+@import '_partial1';
+
+.panel {
+    display: flex;
+    justify-content: space-between;
+    background: $color5;
+}
+
+.panel__wrapper {
+    display: flex;
+    padding: 3vh;
+    height: 100%;
+    align-items: center;
+}
+
+.panel__student {
+    margin: 0 1vw;
+}

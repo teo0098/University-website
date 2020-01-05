@@ -68,7 +68,7 @@ dbconnection_1.default.getConnection(function (error, connection) {
         });
     }
 });
-server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, maxAge: 86400000 * 7 }));
+server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false, maxAge: 86400000 * 7 }));
 server.use(cookie_parser_1.default());
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(body_parser_1.default.json());
@@ -256,7 +256,12 @@ server.post('/students/login', function (req, res) {
                         throw 'Email or password is incorrect';
                     }
                     else {
-                        student = { name: result[0].student_name, lastname: result[0].student_lastname, email: result[0].student_email };
+                        student = {
+                            name: result[0].student_name, lastname: result[0].student_lastname, sex: result[0].student_sex,
+                            pin: result[0].student_PIN, birthdate: result[0].student_birthdate, phone: result[0].student_phonenumber,
+                            email: result[0].student_email, zipcode: result[0].student_zipcode, location: result[0].student_location,
+                            apartment: result[0].student_apartmentnumber, street: result[0].student_street
+                        };
                         req.session.logged = student;
                         res.status(200).redirect('/students/panel');
                     }
@@ -273,7 +278,13 @@ server.post('/students/login', function (req, res) {
 });
 server.get('/students/panel', function (req, res) {
     if (req.session.logged) {
-        res.status(200).render('panel', {});
+        var student_data_1 = [];
+        var student_keys = Object.keys(req.session.logged);
+        var student_1 = req.session.logged;
+        student_keys.forEach(function (value) { return student_data_1.push([value, student_1[value]]); });
+        res.status(200).render('panel', {
+            student_data: student_data_1
+        });
     }
     else {
         res.status(401).redirect('/students/signup');
