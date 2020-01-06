@@ -250,4 +250,38 @@ body {
   text-transform: capitalize;
 }
 
+.panelData {
+  width: 100%;
+  padding: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panelData__table {
+  background: #FF7F50;
+  border-radius: 0.2vh;
+  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
+  border-spacing: 2vw 3vh;
+}
+
+.panelData__col {
+  color: #0e0e0e;
+  padding: 1vh;
+  border-bottom: 0.1vh solid #0e0e0e;
+  font-size: 1.2vw;
+}
+
+.panelData__th {
+  text-align: left;
+}
+
+.panelData__td {
+  text-transform: capitalize;
+}
+
+.panelData__Email {
+  text-transform: none;
+}
+
 /*# sourceMappingURL=panel.css.map */

@@ -47,3 +47,37 @@ body {
 .panel__student--h4 {
     text-transform: capitalize;
 }
+
+.panelData {
+    width: 100%;
+    padding: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.panelData__table {
+    background: $color7;
+    border-radius: 0.2vh;
+    box-shadow: 0 0 0.5vw 0 $color4;
+    border-spacing: 2vw 3vh;
+}
+
+.panelData__col {
+    color: $color2;
+    padding: 1vh;
+    border-bottom: 0.1vh solid $color2;
+    font-size: 1.2vw;
+}
+
+.panelData__th {
+    text-align: left;
+}
+
+.panelData__td {
+    text-transform: capitalize;
+}
+
+.panelData__Email {
+    text-transform: none;
+}

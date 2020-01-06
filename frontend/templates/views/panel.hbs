@@ -17,15 +17,26 @@
             <i class="fas fa-user-graduate panel__studentIcon panel__icon"></i>
             <h4 class="panel__student panel__student--h4">{{student_data.[0].value}} {{student_data.[1].value}}</h4>
             <i class="fas fa-caret-down panel__arrowIcon panel__icon"></i>
+            <ul class="panel__ul">
+                <li class="panel__li">Personal information</li>
+                <li class="panel__li">My grades</li>
+            </ul>
         </div>
         <div class="panel__wrapper">
             <a href="#" class="panel__student">Log me out</a>
             <i class="fas fa-sign-out-alt panel__outIcon panel__icon"></i>
         </div>
     </div>
-    {{#each student_data as |data|}}
-        <h2>{{data.key}}: {{data.value}}</h2>
-    {{/each}}
+    <div class="panelData">
+        <table class="panelData__table">
+            {{#each student_data as |data|}}
+                <tr class="panelData__tr">
+                    <th class="panelData__col panelData__th">{{data.key}}</th>
+                    <td class="panelData__col panelData__td panelData__{{data.key}}">{{data.value}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
     <script src="/src/students.js"></script>
 </body>
 </html>

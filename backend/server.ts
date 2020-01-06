@@ -28,7 +28,7 @@ pool.getConnection((error, connection) => {
     }
 });
 
-server.use(session( { secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false ,maxAge: 86400000 * 7 } ));
+server.use(session( { secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false , maxAge:  86400000 * 7 } )); //Date.now() +
 server.use(cookie());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
