@@ -236,9 +236,64 @@ body {
   font-size: 1.2vw;
 }
 
+.panel__submenu {
+  position: relative;
+  padding: 0.5vh;
+  cursor: pointer;
+}
+
 .panel__arrowIcon {
   font-size: 2vw;
-  cursor: pointer;
+  transition: transform 0.2s ease-out;
+}
+
+.panel__submenu:hover .panel__arrowIcon {
+  transform: rotateX(180deg);
+}
+
+.panel__submenu:hover .panel__ul {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.panel__ul {
+  position: absolute;
+  list-style-type: none;
+  background: #0e0e0e;
+  padding: 2vh;
+  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.panel__li {
+  margin: 1vh 0;
+}
+
+.panel__a {
+  display: flex;
+  text-decoration: none;
+  color: #f1f1f1;
+  align-items: center;
+  padding: 2vh;
+  border-left: 0.1vh solid #f1f1f1;
+  transition: all 0.2s ease-out;
+}
+
+.panel__a:hover {
+  color: #0e0e0e;
+  background: #f1f1f1;
+}
+
+.panel__span {
+  font-size: 1.2vw;
+  margin-left: 2vw;
+  letter-spacing: 0.1vw;
+}
+
+.panel__menuIcon {
+  font-size: 2vw;
 }
 
 .panel__student {

@@ -68,7 +68,7 @@ dbconnection_1.default.getConnection(function (error, connection) {
         });
     }
 });
-server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false, maxAge: 86400000 * 7 }));
+server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false, maxAge: 86400000 * 7 })); //Date.now() +
 server.use(cookie_parser_1.default());
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(body_parser_1.default.json());
@@ -239,7 +239,7 @@ server.get('/students/signin', function (req, res) {
 server.post('/students/login', function (req, res) {
     var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
     dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, date, dateOfBirth, student, error_1;
+        var match, date, dateOfBirth, sex, student, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -258,10 +258,11 @@ server.post('/students/login', function (req, res) {
                     else {
                         date = new Date(result[0].student_birthdate);
                         dateOfBirth = date.toLocaleDateString();
+                        sex = result[0].student_sex === 'M' ? 'Man' : 'Woman';
                         student = [
                             { key: 'Name', value: result[0].student_name },
                             { key: 'Last name', value: result[0].student_lastname },
-                            { key: 'Sex', value: result[0].student_sex },
+                            { key: 'Sex', value: sex },
                             { key: 'Personal identity number', value: result[0].student_PIN },
                             { key: 'Date of birth', value: dateOfBirth },
                             { key: 'Phone number', value: result[0].student_phonenumber },
@@ -288,6 +289,25 @@ server.post('/students/login', function (req, res) {
 server.get('/students/panel', function (req, res) {
     if (req.session.logged) {
         res.status(200).render('panel', {
+            student_data: req.session.logged
+        });
+    }
+    else {
+        res.status(401).redirect('/students/signup');
+    }
+});
+server.get('/students/grades', function (req, res) {
+    if (req.session.logged) {
+        var queryMajors = "SELECT majors.major_name, students_majors.semnumber FROM majors\n        JOIN students_majors ON majors.major_id = students_majors.major_id\n        JOIN students ON students.student_id = students_majors.student_id\n        WHERE students.student_email = \"" + req.session.logged[6].value + "\"";
+        dbconnection_1.default.query(queryMajors, function (err, result) {
+            if (err) {
+                res.send({ error: 'Error' });
+            }
+            else {
+                res.send(result);
+            }
+        });
+        res.status(200).render('grades', {
             student_data: req.session.logged
         });
     }

@@ -1,0 +1,33 @@
+<div class="panel">
+    <div class="panel__wrapper">
+        <i class="fas fa-user-graduate panel__studentIcon panel__icon"></i>
+        <h4 class="panel__student panel__student--h4">{{student_data.[0].value}} {{student_data.[1].value}}</h4>
+        <div class="panel__submenu">
+            <i class="fas fa-caret-down panel__arrowIcon panel__icon"></i>
+            <ul class="panel__ul">
+                <li class="panel__li">
+                    <a href="/students/panel" class="panel__a">
+                        <i class="fas fa-info-circle panel__menuIcon"></i>
+                        <span class="panel__span">Personal information</span>
+                    </a>
+                </li>
+                <li class="panel__li">
+                    <a href="/students/grades" class="panel__a">
+                        <i class="fas fa-list-ol panel__menuIcon"></i>
+                        <span class="panel__span">My grades</span>
+                    </a>
+                </li>
+                <li class="panel__li">
+                    <a href="#" class="panel__a">
+                        <i class="fas fa-cog panel__menuIcon"></i>
+                        <span class="panel__span">Account settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel__wrapper">
+        <a href="#" class="panel__student">Log me out</a>
+        <i class="fas fa-sign-out-alt panel__outIcon panel__icon"></i>
+    </div>
+</div>

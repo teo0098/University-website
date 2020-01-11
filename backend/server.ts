@@ -204,10 +204,11 @@ server.post('/students/login', (req, res) => {
                     } else {
                         const date = new Date(result[0].student_birthdate);
                         const dateOfBirth = date.toLocaleDateString();
+                        const sex = result[0].student_sex === 'M' ? 'Man' : 'Woman';
                         const student = [ 
                             {key: 'Name', value: result[0].student_name},
                             {key: 'Last name', value: result[0].student_lastname}, 
-                            {key: 'Sex', value: result[0].student_sex},
+                            {key: 'Sex', value: sex},
                             {key: 'Personal identity number', value: result[0].student_PIN}, 
                             {key: 'Date of birth', value: dateOfBirth}, 
                             {key: 'Phone number', value: result[0].student_phonenumber},
@@ -231,6 +232,27 @@ server.post('/students/login', (req, res) => {
 server.get('/students/panel', (req, res) => {
     if ((<any>req).session.logged) {
         res.status(200).render('panel', {
+            student_data: (<any>req).session.logged
+        });
+    } else {
+        res.status(401).redirect('/students/signup');
+    }
+});
+
+server.get('/students/grades', (req, res) => {
+    if ((<any>req).session.logged) {
+        const queryMajors = `SELECT majors.major_name, students_majors.semnumber FROM majors
+        JOIN students_majors ON majors.major_id = students_majors.major_id
+        JOIN students ON students.student_id = students_majors.student_id
+        WHERE students.student_email = "${(<any>req).session.logged[6].value}"`;
+        pool.query(queryMajors, (err, result) => {
+            if (err) {
+                res.send({ error: 'Error' });
+            } else {
+                res.send(result);
+            }
+        });
+        res.status(200).render('grades', {
             student_data: (<any>req).session.logged
         });
     } else {

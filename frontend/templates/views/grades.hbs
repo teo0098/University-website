@@ -15,12 +15,7 @@
     {{>student_panel}}
     <div class="panelData">
         <table class="panelData__table">
-            {{#each student_data as |data|}}
-                <tr class="panelData__tr">
-                    <th class="panelData__col panelData__th">{{data.key}}</th>
-                    <td class="panelData__col panelData__td panelData__{{data.key}}">{{data.value}}</td>
-                </tr>
-            {{/each}}
+            
         </table>
     </div>
     <script src="/src/students.js"></script>
