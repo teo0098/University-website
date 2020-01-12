@@ -50,12 +50,12 @@
                     </tr>
                     {{#each info_data as |info|}}
                         <tr class="panelData__tr">
-                            <td class="panelData__col panelData__td">{{info["major_name"]}}</td>
-                            <td class="panelData__col panelData__td">{{info["semnumber"]}}</td>
-                            <td class="panelData__col panelData__td">{{info["subject_name"]}}</td>
-                            <td class="panelData__col panelData__td">{{info["subject_type"]}}</td>
-                            <td class="panelData__col panelData__td">{{info["teacher_name"]}} {{info["teacher_lastname"]}}</td>
-                            <td class="panelData__col panelData__td">{{info["teacher_degree"]}}</td>
+                            <td class="panelData__col panelData__td">{{info.major_name}}</td>
+                            <td class="panelData__col panelData__td">{{info.semnumber}}</td>
+                            <td class="panelData__col panelData__td">{{info.subject_name}}</td>
+                            <td class="panelData__col panelData__td">{{info.subject_type}}</td>
+                            <td class="panelData__col panelData__td">{{info.teacher_name}} {{info.teacher_lastname}}</td>
+                            <td class="panelData__col panelData__td">{{info.teacher_degree}}</td>
                         </tr>
                     {{/each}}
                 </table>
