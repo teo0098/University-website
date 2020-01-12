@@ -255,7 +255,7 @@ server.get('/students/grades', (req, res) => {
                 error,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: req.query.data
+                info_data: req.query['result']
             });
         });
     } else {
