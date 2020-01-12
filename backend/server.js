@@ -293,28 +293,65 @@ server.get('/students/panel', function (req, res) {
         });
     }
     else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/students/signin');
     }
 });
 server.get('/students/grades', function (req, res) {
     if (req.session.logged) {
-        var queryMajors = "SELECT majors.major_name, students_majors.semnumber FROM majors\n        JOIN students_majors ON majors.major_id = students_majors.major_id\n        JOIN students ON students.student_id = students_majors.student_id\n        WHERE students.student_email = \"" + req.session.logged[6].value + "\"";
+        var queryMajors = "SELECT majors.major_name, students_majors.semnumber FROM majors\n                             JOIN students_majors ON majors.major_id = students_majors.major_id\n                             JOIN students ON students.student_id = students_majors.student_id\n                             WHERE students.student_email = \"" + req.session.logged[6].value + "\";";
+        var error_2 = null;
         dbconnection_1.default.query(queryMajors, function (err, result) {
             if (err) {
-                res.send({ error: 'Error' });
+                error_2 = 'There has been problem with database occured, please try again later.';
             }
-            else {
-                res.send(result);
-            }
-        });
-        res.status(200).render('grades', {
-            student_data: req.session.logged
+            res.status(200).render('grades', {
+                student_data: req.session.logged,
+                error: error_2,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: req.query.data
+            });
         });
     }
     else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/students/signin');
     }
 });
+server.get('/students/info', function (req, res) {
+    if (req.session.logged) {
+        var select = "SELECT s_m.semnumber FROM majors m\n                        JOIN students_majors s_m ON m.major_id = s_m.major_id\n                        JOIN students s ON s.student_id = s_m.student_id\n                        WHERE m.major_name = ? AND s.student_email = \"" + req.session.logged[6].value + "\"";
+        dbconnection_1.default.query(select, ["" + req.query.major], function (err, result) {
+            if (err) {
+                res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
+            }
+            else {
+                if (result[0].semnumber < req.query.semester) {
+                    res.status(404).redirect("/students/grades?error=" + encodeURIComponent('You have not reached that semester yet.'));
+                }
+                else {
+                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id \n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id \n                                     AND m.major_name = ? AND m_s.semnumber = ?";
+                    dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester], function (err2, result2) {
+                        if (err2) {
+                            res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
+                        }
+                        else {
+                            res.send(result2);
+                        }
+                    });
+                }
+            }
+        });
+    }
+    else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+/*
+SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type, t.teacher_name, t.teacher_lastname, t.teacher_degree
+FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
+WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id
+AND m.major_name = "Dietetics" AND m_s.semnumber = 2
+*/
 server.listen(port, function () {
     console.log("Server running on port " + port);
 });

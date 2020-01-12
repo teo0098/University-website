@@ -339,4 +339,66 @@ body {
   text-transform: none;
 }
 
+.panelData__errorIcon {
+  color: crimson;
+  font-size: 5vw;
+}
+
+.panelData__error {
+  color: crimson;
+  margin: 2vh 0;
+  text-align: center;
+}
+
+.panelData__selection {
+  display: flex;
+  margin-bottom: 5vh;
+}
+
+.panelData__select {
+  border: none;
+  outline: none;
+  border-bottom: 0.2vh solid #FF7F50;
+  background: transparent;
+  padding: 0.5vh;
+  letter-spacing: 0.1vw;
+  margin: 0 1vw;
+}
+
+.panelData__btn {
+  padding: 1vh;
+  cursor: pointer;
+  font-size: 1.5vw;
+  border: 0.1vw solid #FF7F50;
+  background: transparent;
+  color: rgba(24, 23, 23, 0.753);
+  border-radius: 0.3vw;
+  outline: none;
+  position: relative;
+  letter-spacing: 0.1vw;
+  margin: 0 1vw;
+}
+
+.panelData__btn::after {
+  content: "";
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 0;
+  background: #FF7F50;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.2s ease-out;
+}
+
+.panelData__btn:hover::after {
+  content: "Reveal";
+  height: 100%;
+  color: rgba(24, 23, 23, 0.753);
+}
+
 /*# sourceMappingURL=panel.css.map */

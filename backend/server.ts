@@ -235,30 +235,74 @@ server.get('/students/panel', (req, res) => {
             student_data: (<any>req).session.logged
         });
     } else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/students/signin');
     }
 });
 
 server.get('/students/grades', (req, res) => {
     if ((<any>req).session.logged) {
         const queryMajors = `SELECT majors.major_name, students_majors.semnumber FROM majors
-        JOIN students_majors ON majors.major_id = students_majors.major_id
-        JOIN students ON students.student_id = students_majors.student_id
-        WHERE students.student_email = "${(<any>req).session.logged[6].value}"`;
+                             JOIN students_majors ON majors.major_id = students_majors.major_id
+                             JOIN students ON students.student_id = students_majors.student_id
+                             WHERE students.student_email = "${(<any>req).session.logged[6].value}";`;
+        let error: string | null = null;
         pool.query(queryMajors, (err, result) => {
             if (err) {
-                res.send({ error: 'Error' });
-            } else {
-                res.send(result);
+                error = 'There has been problem with database occured, please try again later.';
             }
-        });
-        res.status(200).render('grades', {
-            student_data: (<any>req).session.logged
+            res.status(200).render('grades', {
+                student_data: (<any>req).session.logged,
+                error,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: req.query.data
+            });
         });
     } else {
-        res.status(401).redirect('/students/signup');
+        res.status(401).redirect('/students/signin');
     }
 });
+
+server.get('/students/info', (req, res) => {
+    if ((<any>req).session.logged) {
+        const select = `SELECT s_m.semnumber FROM majors m
+                        JOIN students_majors s_m ON m.major_id = s_m.major_id
+                        JOIN students s ON s.student_id = s_m.student_id
+                        WHERE m.major_name = ? AND s.student_email = "${(<any>req).session.logged[6].value}"`;
+        pool.query(select, [`${req.query.major}`], (err, result) => {
+            if (err) {
+                res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
+            } else {
+                if (result[0].semnumber < req.query.semester) {
+                    res.status(404).redirect(`/students/grades?error=${encodeURIComponent('You have not reached that semester yet.')}`);
+                } else {
+                    const select2 = `SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,
+                                     t.teacher_name, t.teacher_lastname, t.teacher_degree
+                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
+                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id 
+                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id 
+                                     AND m.major_name = ? AND m_s.semnumber = ?`;
+                    pool.query(select2, [`${req.query.major}`, req.query.semester], (err2, result2) => {
+                        if (err2) {
+                            res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
+                        } else {
+                            res.send(result2);
+                        }
+                    });
+                }
+            }
+        });
+    } else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+
+/*
+SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type, t.teacher_name, t.teacher_lastname, t.teacher_degree
+FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
+WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id 
+AND m.major_name = "Dietetics" AND m_s.semnumber = 2
+*/
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
