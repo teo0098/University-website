@@ -286,9 +286,7 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
-                            res.status(200).render('grades', {
-                                info_data: result
-                            });
+                            res.status(200).redirect(`/students/grades?data=${JSON.stringify(result)}`);
                         }
                     });
                 }
