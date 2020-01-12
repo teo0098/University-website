@@ -309,7 +309,7 @@ server.get('/students/grades', function (req, res) {
                 error: error_2,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: JSON.parse(req.query.data)
+                info_data: req.query.data
             });
         });
     }
@@ -335,7 +335,7 @@ server.get('/students/info', function (req, res) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
                         }
                         else {
-                            res.status(200).redirect("/students/grades?data=" + JSON.stringify(result));
+                            res.status(200).redirect("/students/grades?data=" + JSON.stringify(result2));
                         }
                     });
                 }
