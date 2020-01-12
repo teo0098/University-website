@@ -286,10 +286,11 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
-                            res.status(200).redirect(`/students/grades?data=${JSON.stringify(result2[0])}
-                            &data=${JSON.stringify(result2[1])}&data=${JSON.stringify(result2[2])}&data=${JSON.stringify(result2[3])}
-                            &data=${JSON.stringify(result2[4])}&data=${JSON.stringify(result2[5])}&data=${JSON.stringify(result2[6])}
-                            &data=${JSON.stringify(result2[7])}&data=${JSON.stringify(result2[8])}`);
+                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
                         }
                     });
                 }
