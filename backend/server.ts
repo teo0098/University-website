@@ -255,7 +255,7 @@ server.get('/students/grades', (req, res) => {
                 error,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: JSON.parse(req.query.data)
+                info_data: req.query.data
             });
         });
     } else {
@@ -286,7 +286,7 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
-                            res.status(200).redirect(`/students/grades?data=${JSON.stringify(result2)}`);
+                            res.status(200).redirect(`/students/grades?data=${result2}`);
                         }
                     });
                 }
