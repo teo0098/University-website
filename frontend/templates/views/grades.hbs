@@ -40,7 +40,24 @@
                 <h1 class="panelData__error">{{info_error}}</h1>
             {{else}}
                 <table class="panelData__table">
-                
+                    <tr class="panelData__tr">
+                        <th class="panelData__col panelData__th">Major name</th>
+                        <th class="panelData__col panelData__th">Semester number</th>
+                        <th class="panelData__col panelData__th">Subject name</th>
+                        <th class="panelData__col panelData__th">Subject type</th>
+                        <th class="panelData__col panelData__th">Teacher</th>
+                        <th class="panelData__col panelData__th">Teacher degree</th>
+                    </tr>
+                    {{#each info_data as |info|}}
+                        <tr class="panelData__tr">
+                            <td class="panelData__col panelData__td">{{info.major_name}}</td>
+                            <td class="panelData__col panelData__td">{{info.semnumber}}</td>
+                            <td class="panelData__col panelData__td">{{info.subject_name}}</td>
+                            <td class="panelData__col panelData__td">{{info.subject_type}}</td>
+                            <td class="panelData__col panelData__td">{{info.teacher_name}} {{info.teacher_lastname}}</td>
+                            <td class="panelData__col panelData__td">{{info.teacher_degree}}</td>
+                        </tr>
+                    {{/each}}
                 </table>
             {{/if}}
         {{/if}}
