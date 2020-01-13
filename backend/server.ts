@@ -247,20 +247,27 @@ server.get('/students/grades', (req, res) => {
                              WHERE students.student_email = "${(<any>req).session.logged[6].value}";`;
         let error: string | null = null;
         pool.query(queryMajors, (err, result) => {
+            const splitArray: Array<Array<string | number>> = [];
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
-            }
-            if (req.query.majors) {
-                res.send({data: req.query.majors});
             } else {
-                res.status(200).render('grades', {
-                    student_data: (<any>req).session.logged,
-                    error,
-                    majors_data: result,
-                    info_error: req.query.error,
-                    info_data: req.query.data
-                });
+                const queryArray: Array<string | number> = req.query.data;
+                let holdArray: Array<string | number> = [];
+                for (let i = 0; i < queryArray.length; i++) {
+                    if (i % 7 === 0) {
+                        splitArray.push(holdArray);
+                        holdArray = [];
+                    }
+                    holdArray.push(queryArray[i]);
+                }
             }
+            res.status(200).render('grades', {
+                student_data: (<any>req).session.logged,
+                error,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: splitArray
+            });
         });
     } else {
         res.status(401).redirect('/students/signin');
@@ -320,13 +327,6 @@ server.get('/students/info', (req, res) => {
         res.status(401).redirect('/students/signin');
     }
 });
-
-/*
-SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type, t.teacher_name, t.teacher_lastname, t.teacher_degree
-FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
-WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id 
-AND m.major_name = "Dietetics" AND m_s.semnumber = 2
-*/
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
