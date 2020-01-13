@@ -250,13 +250,12 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            const data = JSON.parse(req.query.data);
             res.status(200).render('grades', {
                 student_data: (<any>req).session.logged,
                 error,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: data
+                info_data: req.query.data
             });
         });
     } else {
@@ -287,14 +286,18 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
-                            res.redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2))}`);
-                            /*
-                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
-                            */
+                            const majorNames = result2.map(el => el.major_name);
+                            const semesters = result2.map(el => el.semnumber);
+                            const subjectNames = result2.map(el => el.subject_name);
+                            const subjectTypes = result2.map(el => el.subject_type);
+                            const teacherNames = result2.map(el => el.teacher_name);
+                            const teacherLastnames = result2.map(el => el.teacherLastnames);
+                            const teacherDegrees = result2.map(el => el.teacher_degree);
+                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(majorNames))}
+                            &data=${encodeURIComponent(JSON.stringify(semesters))}&data=${encodeURIComponent(JSON.stringify(subjectNames))}
+                            &data=${encodeURIComponent(JSON.stringify(subjectTypes))}&data=${encodeURIComponent(JSON.stringify(teacherNames))}
+                            &data=${encodeURIComponent(JSON.stringify(teacherLastnames))}
+                            &data=${encodeURIComponent(JSON.stringify(teacherDegrees))}`);
                         }
                     });
                 }
