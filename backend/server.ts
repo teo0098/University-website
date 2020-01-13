@@ -250,17 +250,13 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            if (req.query.data) {
-                res.send({data: JSON.parse(req.query.data)});
-            } else {
-                res.status(200).render('grades', {
-                    student_data: (<any>req).session.logged,
-                    error,
-                    majors_data: result,
-                    info_error: req.query.error,
-                    info_data: req.query.data
-                });
-            }
+            res.status(200).render('grades', {
+                student_data: (<any>req).session.logged,
+                error,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: req.query.data
+            });
         });
     } else {
         res.status(401).redirect('/students/signin');
