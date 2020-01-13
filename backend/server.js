@@ -305,7 +305,7 @@ server.get('/students/grades', function (req, res) {
                 error_2 = 'There has been problem with database occured, please try again later.';
             }
             if (req.query.data) {
-                res.send({ data: req.query.data });
+                res.send({ data: JSON.parse(req.query.data) });
             }
             else {
                 res.status(200).render('grades', {
