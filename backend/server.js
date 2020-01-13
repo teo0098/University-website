@@ -304,12 +304,13 @@ server.get('/students/grades', function (req, res) {
             if (err) {
                 error_2 = 'There has been problem with database occured, please try again later.';
             }
+            var data = JSON.parse(req.query.data);
             res.status(200).render('grades', {
                 student_data: req.session.logged,
                 error: error_2,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: req.query.data
+                info_data: data
             });
         });
     }
