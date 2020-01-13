@@ -341,16 +341,13 @@ server.get('/students/info', function (req, res) {
                         }
                         else {
                             var data = '';
-                            var data2 = '';
-                            for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
-                                var obj = result_1[_i];
+                            for (var _i = 0, result2_1 = result2; _i < result2_1.length; _i++) {
+                                var obj = result2_1[_i];
                                 for (var key in obj) {
                                     data += "data=" + encodeURIComponent(obj[key]) + "&";
-                                    data2 += obj[key];
                                 }
                             }
-                            res.send({ data: data, data2: data2 });
-                            //res.status(200).redirect(`/students/grades?${data}`);
+                            res.status(200).redirect("/students/grades?" + data);
                             /*
                             const majorNames = result2.map(el => el.major_name);
                             const semesters = result2.map(el => el.semnumber);
