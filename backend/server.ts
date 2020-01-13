@@ -286,18 +286,14 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
-                            const majorNames = result2.map(el => el.major_name);
-                            const semesters = result2.map(el => el.semnumber);
-                            const subjectNames = result2.map(el => el.subject_name);
-                            const subjectTypes = result2.map(el => el.subject_type);
-                            const teacherNames = result2.map(el => el.teacher_name);
-                            const teacherLastnames = result2.map(el => el.teacher_lastname);
-                            const teacherDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(majorNames)}
-                            &data=${encodeURIComponent(semesters)}&data=${encodeURIComponent(subjectNames)}
-                            &data=${encodeURIComponent(subjectTypes)}&data=${encodeURIComponent(teacherNames)}
-                            &data=${encodeURIComponent(teacherLastnames)}
-                            &data=${encodeURIComponent(teacherDegrees)}`);
+                            res.redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2))}`);
+                            /*
+                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
+                            */
                         }
                     });
                 }
