@@ -250,19 +250,23 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            res.status(200).render('grades', {
-                student_data: (<any>req).session.logged,
-                error,
-                majors_data: result,
-                info_error: req.query.error,
-                majors: req.query.majors.split(','),
-                semesters: req.query.semesters,
-                subjectNames: req.query.subjectNames,
-                subjectTypes: req.query.subjectTypes,
-                teachersNames: req.query.teachersNames,
-                teachersLastnames: req.query.teachersLastnames,
-                teachersDegrees: req.query.teachersDegrees
-            });
+            if (req.query.majors) {
+                res.send({data: req.query.majors});
+            } else {
+                res.status(200).render('grades', {
+                    student_data: (<any>req).session.logged,
+                    error,
+                    majors_data: result,
+                    info_error: req.query.error,
+                    majors: req.query.majors,
+                    semesters: req.query.semesters,
+                    subjectNames: req.query.subjectNames,
+                    subjectTypes: req.query.subjectTypes,
+                    teachersNames: req.query.teachersNames,
+                    teachersLastnames: req.query.teachersLastnames,
+                    teachersDegrees: req.query.teachersDegrees
+                });
+            }
         });
     } else {
         res.status(401).redirect('/students/signin');
