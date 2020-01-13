@@ -251,7 +251,7 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             } else {
-                const queryArray: Array<string | number> = req.query.data;
+                const queryArray: Array<string | number> = [...req.query.data];
                 let holdArray: Array<string | number> = [];
                 for (let i = 0; i < queryArray.length; i++) {
                     if (i % 7 === 0) {
