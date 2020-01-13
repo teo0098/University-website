@@ -309,7 +309,13 @@ server.get('/students/grades', function (req, res) {
                 error: error_2,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: req.query.data
+                majors: req.query.majors,
+                semesters: req.query.semesters,
+                subjectNames: req.query.subjectNames,
+                subjectTypes: req.query.subjectTypes,
+                teachersNames: req.query.teachersNames,
+                teachersLastnames: req.query.teachersLastnames,
+                teachersDegrees: req.query.teachersDegrees
             });
         });
     }
@@ -339,10 +345,10 @@ server.get('/students/info', function (req, res) {
                             var semesters = result2.map(function (el) { return el.semnumber; });
                             var subjectNames = result2.map(function (el) { return el.subject_name; });
                             var subjectTypes = result2.map(function (el) { return el.subject_type; });
-                            var teacherNames = result2.map(function (el) { return el.teacher_name; });
-                            var teacherLastnames = result2.map(function (el) { return el.teacher_lastname; });
-                            var teacherDegrees = result2.map(function (el) { return el.teacher_degree; });
-                            res.status(200).redirect("/students/grades?data=" + encodeURIComponent(majorNames) + "\n                            &data=" + encodeURIComponent(semesters) + "&data=" + encodeURIComponent(subjectNames) + "\n                            &data=" + encodeURIComponent(subjectTypes) + "&data=" + encodeURIComponent(teacherNames) + "\n                            &data=" + encodeURIComponent(teacherLastnames) + "\n                            &data=" + encodeURIComponent(teacherDegrees));
+                            var teachersNames = result2.map(function (el) { return el.teacher_name; });
+                            var teachersLastnames = result2.map(function (el) { return el.teacher_lastname; });
+                            var teachersDegrees = result2.map(function (el) { return el.teacher_degree; });
+                            res.status(200).redirect("/students/grades?majors=" + encodeURIComponent(majorNames) + "\n                            &semesters=" + encodeURIComponent(semesters) + "&subjectNames=" + encodeURIComponent(subjectNames) + "\n                            &subjectTypes=" + encodeURIComponent(subjectTypes) + "&teachersNames=" + encodeURIComponent(teachersNames) + "\n                            &teachersLastnames=" + encodeURIComponent(teachersLastnames) + "\n                            &teachersDegrees=" + encodeURIComponent(teachersDegrees));
                         }
                     });
                 }

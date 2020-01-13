@@ -255,7 +255,13 @@ server.get('/students/grades', (req, res) => {
                 error,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: req.query.data
+                majors: req.query.majors,
+                semesters: req.query.semesters,
+                subjectNames: req.query.subjectNames,
+                subjectTypes: req.query.subjectTypes,
+                teachersNames: req.query.teachersNames,
+                teachersLastnames: req.query.teachersLastnames,
+                teachersDegrees: req.query.teachersDegrees
             });
         });
     } else {
@@ -290,14 +296,14 @@ server.get('/students/info', (req, res) => {
                             const semesters = result2.map(el => el.semnumber);
                             const subjectNames = result2.map(el => el.subject_name);
                             const subjectTypes = result2.map(el => el.subject_type);
-                            const teacherNames = result2.map(el => el.teacher_name);
-                            const teacherLastnames = result2.map(el => el.teacher_lastname);
-                            const teacherDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(majorNames)}
-                            &data=${encodeURIComponent(semesters)}&data=${encodeURIComponent(subjectNames)}
-                            &data=${encodeURIComponent(subjectTypes)}&data=${encodeURIComponent(teacherNames)}
-                            &data=${encodeURIComponent(teacherLastnames)}
-                            &data=${encodeURIComponent(teacherDegrees)}`);
+                            const teachersNames = result2.map(el => el.teacher_name);
+                            const teachersLastnames = result2.map(el => el.teacher_lastname);
+                            const teachersDegrees = result2.map(el => el.teacher_degree);
+                            res.status(200).redirect(`/students/grades?majors=${encodeURIComponent(majorNames)}
+                            &semesters=${encodeURIComponent(semesters)}&subjectNames=${encodeURIComponent(subjectNames)}
+                            &subjectTypes=${encodeURIComponent(subjectTypes)}&teachersNames=${encodeURIComponent(teachersNames)}
+                            &teachersLastnames=${encodeURIComponent(teachersLastnames)}
+                            &teachersDegrees=${encodeURIComponent(teachersDegrees)}`);
                         }
                     });
                 }
