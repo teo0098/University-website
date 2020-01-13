@@ -308,8 +308,7 @@ server.get('/students/grades', function (req, res) {
                 student_data: req.session.logged,
                 error: error_2,
                 majors_data: result,
-                info_error: req.query.error,
-                info_data: req.query.data
+                info_error: req.query.error
             });
         });
     }
