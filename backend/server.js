@@ -313,13 +313,7 @@ server.get('/students/grades', function (req, res) {
                     error: error_2,
                     majors_data: result,
                     info_error: req.query.error,
-                    majors: req.query.majors,
-                    semesters: req.query.semesters,
-                    subjectNames: req.query.subjectNames,
-                    subjectTypes: req.query.subjectTypes,
-                    teachersNames: req.query.teachersNames,
-                    teachersLastnames: req.query.teachersLastnames,
-                    teachersDegrees: req.query.teachersDegrees
+                    info_data: req.query.data
                 });
             }
         });
@@ -346,14 +340,28 @@ server.get('/students/info', function (req, res) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
                         }
                         else {
-                            var majorNames = result2.map(function (el) { return el.major_name; });
-                            var semesters = result2.map(function (el) { return el.semnumber; });
-                            var subjectNames = result2.map(function (el) { return el.subject_name; });
-                            var subjectTypes = result2.map(function (el) { return el.subject_type; });
-                            var teachersNames = result2.map(function (el) { return el.teacher_name; });
-                            var teachersLastnames = result2.map(function (el) { return el.teacher_lastname; });
-                            var teachersDegrees = result2.map(function (el) { return el.teacher_degree; });
-                            res.status(200).redirect("/students/grades?majors[]=" + encodeURIComponent(majorNames) + "\n                            &semesters=" + encodeURIComponent(semesters) + "&subjectNames=" + encodeURIComponent(subjectNames) + "\n                            &subjectTypes=" + encodeURIComponent(subjectTypes) + "&teachersNames=" + encodeURIComponent(teachersNames) + "\n                            &teachersLastnames=" + encodeURIComponent(teachersLastnames) + "\n                            &teachersDegrees=" + encodeURIComponent(teachersDegrees));
+                            var data = '';
+                            for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
+                                var obj = result_1[_i];
+                                for (var key in obj) {
+                                    data += "data=" + encodeURIComponent(obj[key]) + "&";
+                                }
+                            }
+                            res.status(200).redirect("/students/grades?" + data);
+                            /*
+                            const majorNames = result2.map(el => el.major_name);
+                            const semesters = result2.map(el => el.semnumber);
+                            const subjectNames = result2.map(el => el.subject_name);
+                            const subjectTypes = result2.map(el => el.subject_type);
+                            const teachersNames = result2.map(el => el.teacher_name);
+                            const teachersLastnames = result2.map(el => el.teacher_lastname);
+                            const teachersDegrees = result2.map(el => el.teacher_degree);
+                            res.status(200).redirect(`/students/grades?majors=${encodeURIComponent(majorNames)}
+                            &semesters=${encodeURIComponent(semesters)}&subjectNames=${encodeURIComponent(subjectNames)}
+                            &subjectTypes=${encodeURIComponent(subjectTypes)}&teachersNames=${encodeURIComponent(teachersNames)}
+                            &teachersLastnames=${encodeURIComponent(teachersLastnames)}
+                            &teachersDegrees=${encodeURIComponent(teachersDegrees)}`);
+                            */
                         }
                     });
                 }

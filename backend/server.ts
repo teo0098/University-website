@@ -258,13 +258,7 @@ server.get('/students/grades', (req, res) => {
                     error,
                     majors_data: result,
                     info_error: req.query.error,
-                    majors: req.query.majors,
-                    semesters: req.query.semesters,
-                    subjectNames: req.query.subjectNames,
-                    subjectTypes: req.query.subjectTypes,
-                    teachersNames: req.query.teachersNames,
-                    teachersLastnames: req.query.teachersLastnames,
-                    teachersDegrees: req.query.teachersDegrees
+                    info_data: req.query.data
                 });
             }
         });
@@ -296,6 +290,14 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
+                            let data: string = '';
+                            for (const obj of result) {
+                                for (let key in obj) {
+                                    data += `data=${encodeURIComponent(obj[key])}&`;
+                                }
+                            }
+                            res.status(200).redirect(`/students/grades?${data}`);
+                            /*
                             const majorNames = result2.map(el => el.major_name);
                             const semesters = result2.map(el => el.semnumber);
                             const subjectNames = result2.map(el => el.subject_name);
@@ -303,11 +305,12 @@ server.get('/students/info', (req, res) => {
                             const teachersNames = result2.map(el => el.teacher_name);
                             const teachersLastnames = result2.map(el => el.teacher_lastname);
                             const teachersDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?majors[]=${encodeURIComponent(majorNames)}
+                            res.status(200).redirect(`/students/grades?majors=${encodeURIComponent(majorNames)}
                             &semesters=${encodeURIComponent(semesters)}&subjectNames=${encodeURIComponent(subjectNames)}
                             &subjectTypes=${encodeURIComponent(subjectTypes)}&teachersNames=${encodeURIComponent(teachersNames)}
                             &teachersLastnames=${encodeURIComponent(teachersLastnames)}
                             &teachersDegrees=${encodeURIComponent(teachersDegrees)}`);
+                            */
                         }
                     });
                 }
