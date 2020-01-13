@@ -250,17 +250,13 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            if (req.query.data) {
-                res.send({ data: req.query.data });
-            } else {
-                res.status(200).render('grades', {
-                    student_data: (<any>req).session.logged,
-                    error,
-                    majors_data: result,
-                    info_error: req.query.error,
-                    info_data: req.query.data || []
-                });
-            }
+            res.status(200).render('grades', {
+                student_data: (<any>req).session.logged,
+                error,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: req.query.data
+            });
         });
     } else {
         res.status(401).redirect('/students/signin');
@@ -290,11 +286,14 @@ server.get('/students/info', (req, res) => {
                         if (err2) {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
+                            res.send(JSON.parse(result2));
+                            /*
                             res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
                             &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
                             &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
                             &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
                             &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
+                            */
                         }
                     });
                 }

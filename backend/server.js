@@ -304,18 +304,13 @@ server.get('/students/grades', function (req, res) {
             if (err) {
                 error_2 = 'There has been problem with database occured, please try again later.';
             }
-            if (req.query.data) {
-                res.send({ data: req.query.data });
-            }
-            else {
-                res.status(200).render('grades', {
-                    student_data: req.session.logged,
-                    error: error_2,
-                    majors_data: result,
-                    info_error: req.query.error,
-                    info_data: req.query.data || []
-                });
-            }
+            res.status(200).render('grades', {
+                student_data: req.session.logged,
+                error: error_2,
+                majors_data: result,
+                info_error: req.query.error,
+                info_data: req.query.data
+            });
         });
     }
     else {
@@ -340,7 +335,14 @@ server.get('/students/info', function (req, res) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
                         }
                         else {
-                            res.status(200).redirect("/students/grades?data=" + encodeURIComponent(JSON.stringify(result2[0])) + "\n                            &data=" + encodeURIComponent(JSON.stringify(result2[1])) + "&data=" + encodeURIComponent(JSON.stringify(result2[2])) + "\n                            &data=" + encodeURIComponent(JSON.stringify(result2[3])) + "&data=" + encodeURIComponent(JSON.stringify(result2[4])) + "\n                            &data=" + encodeURIComponent(JSON.stringify(result2[5])) + "&data=" + encodeURIComponent(JSON.stringify(result2[6])) + "\n                            &data=" + encodeURIComponent(JSON.stringify(result2[7])) + "&data=" + encodeURIComponent(JSON.stringify(result2[8])));
+                            res.send(JSON.parse(result2));
+                            /*
+                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
+                            &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
+                            */
                         }
                     });
                 }
