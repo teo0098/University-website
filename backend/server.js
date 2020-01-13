@@ -335,14 +335,14 @@ server.get('/students/info', function (req, res) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
                         }
                         else {
-                            res.redirect("/students/grades?data=" + encodeURIComponent(JSON.stringify(result2)));
-                            /*
-                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(result2[0]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[1]))}&data=${encodeURIComponent(JSON.stringify(result2[2]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[3]))}&data=${encodeURIComponent(JSON.stringify(result2[4]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[5]))}&data=${encodeURIComponent(JSON.stringify(result2[6]))}
-                            &data=${encodeURIComponent(JSON.stringify(result2[7]))}&data=${encodeURIComponent(JSON.stringify(result2[8]))}`);
-                            */
+                            var majorNames = result2.map(function (el) { return el.major_name; });
+                            var semesters = result2.map(function (el) { return el.semnumber; });
+                            var subjectNames = result2.map(function (el) { return el.subject_name; });
+                            var subjectTypes = result2.map(function (el) { return el.subject_type; });
+                            var teacherNames = result2.map(function (el) { return el.teacher_name; });
+                            var teacherLastnames = result2.map(function (el) { return el.teacher_lastname; });
+                            var teacherDegrees = result2.map(function (el) { return el.teacher_degree; });
+                            res.status(200).redirect("/students/grades?data=" + encodeURIComponent(majorNames) + "\n                            &data=" + encodeURIComponent(semesters) + "&data=" + encodeURIComponent(subjectNames) + "\n                            &data=" + encodeURIComponent(subjectTypes) + "&data=" + encodeURIComponent(teacherNames) + "\n                            &data=" + encodeURIComponent(teacherLastnames) + "\n                            &data=" + encodeURIComponent(teacherDegrees));
                         }
                     });
                 }
