@@ -340,9 +340,9 @@ server.get('/students/info', function (req, res) {
                             var subjectNames = result2.map(function (el) { return el.subject_name; });
                             var subjectTypes = result2.map(function (el) { return el.subject_type; });
                             var teacherNames = result2.map(function (el) { return el.teacher_name; });
-                            var teacherLastnames = result2.map(function (el) { return el.teacherLastnames; });
+                            var teacherLastnames = result2.map(function (el) { return el.teacher_lastname; });
                             var teacherDegrees = result2.map(function (el) { return el.teacher_degree; });
-                            res.status(200).redirect("/students/grades?data=" + encodeURIComponent(JSON.stringify(majorNames)) + "\n                            &data=" + encodeURIComponent(JSON.stringify(semesters)) + "&data=" + encodeURIComponent(JSON.stringify(subjectNames)) + "\n                            &data=" + encodeURIComponent(JSON.stringify(subjectTypes)) + "&data=" + encodeURIComponent(JSON.stringify(teacherNames)) + "\n                            &data=" + encodeURIComponent(JSON.stringify(teacherLastnames)) + "\n                            &data=" + encodeURIComponent(JSON.stringify(teacherDegrees)));
+                            res.status(200).redirect("/students/grades?data=" + encodeURIComponent(majorNames) + "\n                            &data=" + encodeURIComponent(semesters) + "&data=" + encodeURIComponent(subjectNames) + "\n                            &data=" + encodeURIComponent(subjectTypes) + "&data=" + encodeURIComponent(teacherNames) + "\n                            &data=" + encodeURIComponent(teacherLastnames) + "\n                            &data=" + encodeURIComponent(teacherDegrees));
                         }
                     });
                 }

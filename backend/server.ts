@@ -291,13 +291,13 @@ server.get('/students/info', (req, res) => {
                             const subjectNames = result2.map(el => el.subject_name);
                             const subjectTypes = result2.map(el => el.subject_type);
                             const teacherNames = result2.map(el => el.teacher_name);
-                            const teacherLastnames = result2.map(el => el.teacherLastnames);
+                            const teacherLastnames = result2.map(el => el.teacher_lastname);
                             const teacherDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(JSON.stringify(majorNames))}
-                            &data=${encodeURIComponent(JSON.stringify(semesters))}&data=${encodeURIComponent(JSON.stringify(subjectNames))}
-                            &data=${encodeURIComponent(JSON.stringify(subjectTypes))}&data=${encodeURIComponent(JSON.stringify(teacherNames))}
-                            &data=${encodeURIComponent(JSON.stringify(teacherLastnames))}
-                            &data=${encodeURIComponent(JSON.stringify(teacherDegrees))}`);
+                            res.status(200).redirect(`/students/grades?data=${encodeURIComponent(majorNames)}
+                            &data=${encodeURIComponent(semesters)}&data=${encodeURIComponent(subjectNames)}
+                            &data=${encodeURIComponent(subjectTypes)}&data=${encodeURIComponent(teacherNames)}
+                            &data=${encodeURIComponent(teacherLastnames)}
+                            &data=${encodeURIComponent(teacherDegrees)}`);
                         }
                     });
                 }
