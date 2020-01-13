@@ -291,12 +291,15 @@ server.get('/students/info', (req, res) => {
                             res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
                         } else {
                             let data: string = '';
+                            let data2: string = '';
                             for (const obj of result) {
                                 for (let key in obj) {
                                     data += `data=${encodeURIComponent(obj[key])}&`;
+                                    data2 += obj[key];
                                 }
                             }
-                            res.status(200).redirect(`/students/grades?${data}`);
+                            res.send({ data, data2 });
+                            //res.status(200).redirect(`/students/grades?${data}`);
                             /*
                             const majorNames = result2.map(el => el.major_name);
                             const semesters = result2.map(el => el.semnumber);
