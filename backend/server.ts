@@ -303,7 +303,7 @@ server.get('/students/info', (req, res) => {
                             const teachersNames = result2.map(el => el.teacher_name);
                             const teachersLastnames = result2.map(el => el.teacher_lastname);
                             const teachersDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?majors=${encodeURIComponent(majorNames)}
+                            res.status(200).redirect(`/students/grades?majors[]=${encodeURIComponent(majorNames)}
                             &semesters=${encodeURIComponent(semesters)}&subjectNames=${encodeURIComponent(subjectNames)}
                             &subjectTypes=${encodeURIComponent(subjectTypes)}&teachersNames=${encodeURIComponent(teachersNames)}
                             &teachersLastnames=${encodeURIComponent(teachersLastnames)}

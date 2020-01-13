@@ -353,7 +353,7 @@ server.get('/students/info', function (req, res) {
                             var teachersNames = result2.map(function (el) { return el.teacher_name; });
                             var teachersLastnames = result2.map(function (el) { return el.teacher_lastname; });
                             var teachersDegrees = result2.map(function (el) { return el.teacher_degree; });
-                            res.status(200).redirect("/students/grades?majors=" + encodeURIComponent(majorNames) + "\n                            &semesters=" + encodeURIComponent(semesters) + "&subjectNames=" + encodeURIComponent(subjectNames) + "\n                            &subjectTypes=" + encodeURIComponent(subjectTypes) + "&teachersNames=" + encodeURIComponent(teachersNames) + "\n                            &teachersLastnames=" + encodeURIComponent(teachersLastnames) + "\n                            &teachersDegrees=" + encodeURIComponent(teachersDegrees));
+                            res.status(200).redirect("/students/grades?majors[]=" + encodeURIComponent(majorNames) + "\n                            &semesters=" + encodeURIComponent(semesters) + "&subjectNames=" + encodeURIComponent(subjectNames) + "\n                            &subjectTypes=" + encodeURIComponent(subjectTypes) + "&teachersNames=" + encodeURIComponent(teachersNames) + "\n                            &teachersLastnames=" + encodeURIComponent(teachersLastnames) + "\n                            &teachersDegrees=" + encodeURIComponent(teachersDegrees));
                         }
                     });
                 }
