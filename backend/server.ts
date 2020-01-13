@@ -247,12 +247,13 @@ server.get('/students/grades', (req, res) => {
                              WHERE students.student_email = "${(<any>req).session.logged[6].value}";`;
         let error: string | null = null;
         pool.query(queryMajors, (err, result) => {
-            const splitArray: Array<Array<string | number>> = [];
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
-            } else {
-                const queryArray: Array<string | number> = [...req.query.data];
-                let holdArray: Array<string | number> = [];
+            }
+            const splitArray: Array<Array<string | number>> = [];
+            const queryArray: Array<string | number> = req.query.data;
+            let holdArray: Array<string | number> = [];
+            if (queryArray.length && queryArray !== undefined) {
                 for (let i = 0; i < queryArray.length; i++) {
                     if (i % 7 === 0) {
                         splitArray.push(holdArray);

@@ -35,13 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -308,13 +301,13 @@ server.get('/students/grades', function (req, res) {
         var queryMajors = "SELECT majors.major_name, students_majors.semnumber FROM majors\n                             JOIN students_majors ON majors.major_id = students_majors.major_id\n                             JOIN students ON students.student_id = students_majors.student_id\n                             WHERE students.student_email = \"" + req.session.logged[6].value + "\";";
         var error_2 = null;
         dbconnection_1.default.query(queryMajors, function (err, result) {
-            var splitArray = [];
             if (err) {
                 error_2 = 'There has been problem with database occured, please try again later.';
             }
-            else {
-                var queryArray = __spreadArrays(req.query.data);
-                var holdArray = [];
+            var splitArray = [];
+            var queryArray = req.query.data;
+            var holdArray = [];
+            if (queryArray.length && queryArray !== undefined) {
                 for (var i = 0; i < queryArray.length; i++) {
                     if (i % 7 === 0) {
                         splitArray.push(holdArray);
