@@ -309,7 +309,7 @@ server.get('/students/grades', function (req, res) {
                 error: error_2,
                 majors_data: result,
                 info_error: req.query.error,
-                majors: req.query.majors,
+                majors: req.query.majors.split(','),
                 semesters: req.query.semesters,
                 subjectNames: req.query.subjectNames,
                 subjectTypes: req.query.subjectTypes,
