@@ -253,8 +253,8 @@ server.get('/students/grades', (req, res) => {
             const splitArray: Array<Array<string>> = [];
             if (req.query.data) {
                 let holdArray: Array<string> = [];
-                for (let i = 1; i <= req.query.data.length; i++) {
-                    if (i % 7 === 0) {
+                for (let i = 0; i < req.query.data.length; i++) {
+                    if (i % 7 === 0 && i > 0) {
                         splitArray.push(holdArray);
                         holdArray = [];
                     }
