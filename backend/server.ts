@@ -250,24 +250,15 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            const splitArray: Array<Array<string | number>> = [];
-            const queryArray: Array<string | number> = req.query.data;
-            let holdArray: Array<string | number> = [];
-            if (queryArray.length && queryArray !== undefined) {
-                for (let i = 0; i < queryArray.length; i++) {
-                    if (i % 7 === 0) {
-                        splitArray.push(holdArray);
-                        holdArray = [];
-                    }
-                    holdArray.push(queryArray[i]);
-                }
+            if (req.query.data) {
+                res.send({ length: req.query.data.length });
             }
             res.status(200).render('grades', {
                 student_data: (<any>req).session.logged,
                 error,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: splitArray
+                info_data: req.query.data
             });
         });
     } else {

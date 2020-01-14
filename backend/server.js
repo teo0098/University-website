@@ -304,24 +304,15 @@ server.get('/students/grades', function (req, res) {
             if (err) {
                 error_2 = 'There has been problem with database occured, please try again later.';
             }
-            var splitArray = [];
-            var queryArray = req.query.data;
-            var holdArray = [];
-            if (queryArray.length && queryArray !== undefined) {
-                for (var i = 0; i < queryArray.length; i++) {
-                    if (i % 7 === 0) {
-                        splitArray.push(holdArray);
-                        holdArray = [];
-                    }
-                    holdArray.push(queryArray[i]);
-                }
+            if (req.query.data) {
+                res.send({ length: req.query.data.length });
             }
             res.status(200).render('grades', {
                 student_data: req.session.logged,
                 error: error_2,
                 majors_data: result,
                 info_error: req.query.error,
-                info_data: splitArray
+                info_data: req.query.data
             });
         });
     }
