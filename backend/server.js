@@ -306,6 +306,7 @@ server.get('/students/grades', function (req, res) {
             }
             var splitArray = [];
             if (req.query.data) {
+                res.send({ data: req.query.data });
                 var holdArray = [];
                 for (var i = 0; i < req.query.data.length; i++) {
                     if (i % 7 === 0) {
@@ -355,20 +356,6 @@ server.get('/students/info', function (req, res) {
                                 }
                             }
                             res.status(200).redirect("/students/grades?" + data);
-                            /*
-                            const majorNames = result2.map(el => el.major_name);
-                            const semesters = result2.map(el => el.semnumber);
-                            const subjectNames = result2.map(el => el.subject_name);
-                            const subjectTypes = result2.map(el => el.subject_type);
-                            const teachersNames = result2.map(el => el.teacher_name);
-                            const teachersLastnames = result2.map(el => el.teacher_lastname);
-                            const teachersDegrees = result2.map(el => el.teacher_degree);
-                            res.status(200).redirect(`/students/grades?majors=${encodeURIComponent(majorNames)}
-                            &semesters=${encodeURIComponent(semesters)}&subjectNames=${encodeURIComponent(subjectNames)}
-                            &subjectTypes=${encodeURIComponent(subjectTypes)}&teachersNames=${encodeURIComponent(teachersNames)}
-                            &teachersLastnames=${encodeURIComponent(teachersLastnames)}
-                            &teachersDegrees=${encodeURIComponent(teachersDegrees)}`);
-                            */
                         }
                     });
                 }
