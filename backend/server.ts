@@ -250,18 +250,17 @@ server.get('/students/grades', (req, res) => {
             if (err) {
                 error = 'There has been problem with database occured, please try again later.';
             }
-            const splitArray: Array<Array<string | number>> = [];
+            const splitArray: Array<Array<string>> = [];
             if (req.query.data) {
-                res.send({data: req.query.data});
-                let holdArray: Array<string | number> = [];
-                for (let i = 0; i < req.query.data.length; i++) {
-                    if (i % 7 === 0) {
+                let holdArray: Array<string> = [];
+                for (let i = 1; i <= req.query.data.length; i++) {
+                    if (i % 8 === 0) {
                         splitArray.push(holdArray);
                         holdArray = [];
                     }
                     holdArray.push(req.query.data[i]);
                 }
-                //res.send({ splitArray });
+                res.send({ splitArray });
             }
             res.status(200).render('grades', {
                 student_data: (<any>req).session.logged,
