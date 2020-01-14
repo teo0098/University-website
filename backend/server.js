@@ -315,7 +315,7 @@ server.get('/students/grades', function (req, res) {
                     }
                     holdArray.push(req.query.data[i]);
                 }
-                res.send({ splitArray: splitArray });
+                //res.send({ splitArray });
             }
             res.status(200).render('grades', {
                 student_data: req.session.logged,
