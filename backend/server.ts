@@ -261,7 +261,6 @@ server.get('/students/grades', (req, res) => {
                     holdArray.push(req.query.data[i]);
                 }
                 splitArray.push(holdArray);
-                res.send({splitArray});
             }
             res.status(200).render('grades', {
                 student_data: (<any>req).session.logged,
