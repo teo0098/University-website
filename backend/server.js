@@ -308,11 +308,13 @@ server.get('/students/grades', function (req, res) {
             if (req.query.data) {
                 var holdArray = [];
                 for (var i = 0; i < req.query.data.length; i++) {
-                    if (i % 7 === 0 && i > 0) {
+                    if (i % 7 !== 0 || i === 0) {
+                        holdArray.push(req.query.data[i]);
+                    }
+                    else if (i % 7 === 0 && i > 0) {
                         splitArray.push(holdArray);
                         holdArray = [];
                     }
-                    holdArray.push(req.query.data[i]);
                 }
                 res.send({ splitArray: splitArray });
             }
