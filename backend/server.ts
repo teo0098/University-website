@@ -254,13 +254,12 @@ server.get('/students/grades', (req, res) => {
             if (req.query.data) {
                 let holdArray: Array<string> = [];
                 for (let i = 1; i <= req.query.data.length; i++) {
-                    if (i % 8 === 0) {
+                    if (i % 7 === 0) {
                         splitArray.push(holdArray);
                         holdArray = [];
                     }
                     holdArray.push(req.query.data[i]);
                 }
-                res.send({ splitArray });
             }
             res.status(200).render('grades', {
                 student_data: (<any>req).session.logged,
