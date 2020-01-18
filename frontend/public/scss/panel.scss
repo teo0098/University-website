@@ -198,3 +198,79 @@ body {
     height: 100%;
     color: $color4;
 }
+
+.panelData__div {
+    width: 80%;
+    border-bottom: 0.1vh solid $color4;
+    display: flex;
+    padding: 1vh;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panelData__h3 {
+    letter-spacing: 0.1vw;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.panelData__icon, .panelData__h3 {
+    font-size: 1.2vw;
+}
+
+.signup__form {
+    min-width: 80%;
+    box-shadow: 0 0 0.5vw 0 $color4;
+    padding: 5vh;
+    color: $color4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2vh 0;
+}
+
+.signup__div {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.signup__data {
+    margin: 2vh 0;
+    width: 30%;
+}
+
+.signup__input {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 0.2vh solid $color7;
+    background: transparent;
+    color: $color4;
+    padding: 0.5vh;
+    letter-spacing: 0.1vw;
+}
+
+.signup__h4 {
+    letter-spacing: 0.1vw;
+}
+
+.panelData__btn--change {
+    margin: 2vh 0;
+}
+
+.panelData__btn--change:hover::after {
+    content: "Change";
+    height: 100%;
+    color: $color4;
+}
+
+.signup__error {
+    display: none;
+    padding: 1vh;
+    background: $color3;
+    color: $color4;
+    border-top: none;
+    box-shadow: 0 0 0.5vw 0 $color4;
+}

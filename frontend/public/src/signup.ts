@@ -54,17 +54,20 @@ checkValidation('#place', '.signup__place', placePattern, validData[8]);
 checkValidation('#apartment', '.signup__apartment', apartmentPattern, validData[9]);
 checkValidation('#street', '.signup__street', placePattern, validData[10]);
 
-$('#repeatPass').on('keyup', function() {
-    $('#repeatPass').css('background', 'transparent');
-    if ($(this).val() === $('#password').val()) {
-        $('.signup__repeatPass').css('display', 'none');
-        validData[3].valid = true;
-    }
-    else {
-        $('.signup__repeatPass').css('display', 'block');
-        validData[3].valid = false;
-    }
-});
+const repeatPassword = (index: number, data: Array<Obj>) => { 
+    $('#repeatPass').on('keyup', function() {
+        $('#repeatPass').css('background', 'transparent');
+        if ($(this).val() === $('#password').val()) {
+            $('.signup__repeatPass').css('display', 'none');
+            data[index].valid = true;
+        }
+        else {
+            $('.signup__repeatPass').css('display', 'block');
+            data[index].valid = false;
+        }
+    });
+};
+repeatPassword(3, validData);
 
 $('#email').on('keyup', () => {
     $('#email').css('background', 'transparent');
@@ -79,12 +82,22 @@ $('#email').on('keyup', () => {
     } 
 });
 
-$('.signup__btn').on('click', (e) => {
-    for (let i = 0; i < validData.length; i++) {
-        if (!validData[i].valid) {
-            e.preventDefault();
-            $(validData[i].name).css('background', 'crimson');
-            break;
+const submitButton = (data: Array<Obj>, cl: string) => {
+    $(cl).on('click', (e) => {
+        for (let i = 0; i < data.length; i++) {
+            if (!data[i].valid) {
+                e.preventDefault();
+                $(data[i].name).css('background', 'crimson');
+                break;
+            }
         }
-    }
-});
+    });
+};
+submitButton(validData, '.signup__btn');
+
+export default {
+    checkValidation,
+    passwordPattern,
+    submitButton,
+    repeatPassword
+};

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="/img/students-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/panel.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&display=swap" rel="stylesheet">
+    <title>Panel</title>
+    <script src="https://kit.fontawesome.com/aa9fb73e01.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {{>menu2}}
+    {{>student_panel}}
+    <div class="panelData">
+        <div class="panelData__div">
+            <h3 class="panelData__h3">Change my password</h3>
+            <i class="fas fa-edit panelData__icon"></i>
+        </div>
+        <form class="signup__form" action="/students/alteration" method="POST">
+            <div class="signup__div">
+                <section class="signup__data">
+                    <h4 class="signup__h4">Current password:</h4>
+                    <input type="password" name="password" id="oldpassword" class="signup__input">
+                </section>
+                <section class="signup__data">
+                    <h4 class="signup__h4">New password:</h4>
+                    <input type="password" name="newpassword" id="password" class="signup__input">
+                    <span class="signup__error signup__password">From 8 up to 30 characters. 
+                    Allowed characters: letters, numbers, @#!$*-_^&<strong>.</strong>,</span>
+                </section>
+                <section class="signup__data">
+                    <h4 class="signup__h4">Repeat new password:</h4>
+                    <input type="password" name="rnewpassword" id="repeatPass" class="signup__input">
+                    <span class="signup__error signup__repeatPass">Passwords must be the same</span>
+                </section>
+            </div>
+            <button class="panelData__btn panelData__btn--change">Change</button>
+        </form>
+    </div>
+    <script src="/src/settings.js"></script>
+</body>
+</html>

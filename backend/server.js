@@ -365,6 +365,11 @@ server.get('/students/info', function (req, res) {
         res.status(401).redirect('/students/signin');
     }
 });
+server.get('/students/settings', function (req, res) {
+    res.render('settings', {
+        student_data: req.session.logged
+    });
+});
 server.listen(port, function () {
     console.log("Server running on port " + port);
 });

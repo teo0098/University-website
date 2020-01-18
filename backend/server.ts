@@ -315,6 +315,20 @@ server.get('/students/info', (req, res) => {
     }
 });
 
+server.get('/students/settings', (req, res) => {
+    if ((<any>req).session.logged) {
+        res.status(200).render('settings', {
+            student_data: (<any>req).session.logged
+        });
+    } else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+
+server.post('/students/alteration', (req, res) => {
+    
+});
+
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
