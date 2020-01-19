@@ -329,12 +329,6 @@
   content: "Sign in";
 }
 
-.signin__forgot {
-  color: #FF7F50;
-  margin: 2vh 0;
-  letter-spacing: 0.1vw;
-}
-
 @media (max-width: 800px) {
   .signup__form, .signup__div {
     width: 100%;
