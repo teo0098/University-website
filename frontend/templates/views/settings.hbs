@@ -18,6 +18,15 @@
             <h3 class="panelData__h3">Change my password</h3>
             <i class="fas fa-edit panelData__icon"></i>
         </div>
+        {{#if error}}
+            <i class="fas fa-exclamation-triangle panelData__errorIcon"></i>
+            <h1 class="panelData__error">{{error}}</h1>
+        {{else}}
+            {{#if success}}
+                <i class="fas fa-check-circle signup__successIcon"></i>
+                <h2 class="signup__successName">{{success}}</h2>
+            {{/if}}
+        {{/if}}
         <form class="signup__form" action="/students/alteration" method="POST">
             <div class="signup__div">
                 <section class="signup__data">

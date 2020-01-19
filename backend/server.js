@@ -46,7 +46,6 @@ var dbconnection_1 = __importDefault(require("./dbconnection"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var sendEmail_1 = __importDefault(require("./sendEmail"));
 var express_session_1 = __importDefault(require("express-session"));
-var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var server = express_1.default();
 var port = process.env.PORT;
@@ -69,7 +68,6 @@ dbconnection_1.default.getConnection(function (error, connection) {
     }
 });
 server.use(express_session_1.default({ secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false, maxAge: 86400000 * 7 })); //Date.now() +
-server.use(cookie_parser_1.default());
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(body_parser_1.default.json());
 server.set('views', path_1.default.join(__dirname, '../frontend/templates/views'));
@@ -302,7 +300,7 @@ server.get('/students/grades', function (req, res) {
         var error_2 = null;
         dbconnection_1.default.query(queryMajors, function (err, result) {
             if (err) {
-                error_2 = 'There has been problem with database occured, please try again later.';
+                error_2 = 'There has been problem with the database occured, please try again later.';
             }
             var splitArray = [];
             if (req.query.data) {
@@ -334,7 +332,7 @@ server.get('/students/info', function (req, res) {
         var select = "SELECT s_m.semnumber FROM majors m\n                        JOIN students_majors s_m ON m.major_id = s_m.major_id\n                        JOIN students s ON s.student_id = s_m.student_id\n                        WHERE m.major_name = ? AND s.student_email = \"" + req.session.logged[6].value + "\"";
         dbconnection_1.default.query(select, ["" + req.query.major], function (err, result) {
             if (err) {
-                res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
+                res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
             }
             else {
                 if (result[0].semnumber < req.query.semester) {
@@ -344,7 +342,7 @@ server.get('/students/info', function (req, res) {
                     var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id \n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id \n                                     AND m.major_name = ? AND m_s.semnumber = ?";
                     dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester], function (err2, result2) {
                         if (err2) {
-                            res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with database occured, please try again later.'));
+                            res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
                         }
                         else {
                             var data = '';
@@ -366,9 +364,72 @@ server.get('/students/info', function (req, res) {
     }
 });
 server.get('/students/settings', function (req, res) {
-    res.render('settings', {
-        student_data: req.session.logged
-    });
+    if (req.session.logged) {
+        res.status(200).render('settings', {
+            student_data: req.session.logged,
+            error: req.query.error,
+            success: req.query.success
+        });
+    }
+    else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+server.post('/students/alteration', function (req, res) {
+    if (req.session.logged) {
+        var select = "SELECT student_password FROM students WHERE student_email = ?";
+        dbconnection_1.default.query(select, ["" + req.session.logged[6].value], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
+            var match, hash, update, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        if (!err) return [3 /*break*/, 1];
+                        throw 'There has been problem with the database occured, please try again later.';
+                    case 1: return [4 /*yield*/, bcryptjs_1.default.compare(req.body.password, result[0].student_password)];
+                    case 2:
+                        match = _a.sent();
+                        if (!!match) return [3 /*break*/, 3];
+                        throw 'You have entered incorrect current password';
+                    case 3: return [4 /*yield*/, bcryptjs_1.default.hash(req.body.newpassword, 10)];
+                    case 4:
+                        hash = _a.sent();
+                        req.body.newpassword = hash;
+                        update = "UPDATE students SET student_password = ?\n                                        WHERE student_email = \"" + req.session.logged[6].value + "\"";
+                        dbconnection_1.default.query(update, ["" + req.body.newpassword], function (err2) {
+                            if (err2) {
+                                throw 'There has been problem with the database occured, please try again later.';
+                            }
+                            else {
+                                res.status(201).redirect("/students/settings?success=" + encodeURIComponent('Password has been successfully updated'));
+                            }
+                        });
+                        _a.label = 5;
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        e_2 = _a.sent();
+                        if (e_2 === null || e_2 === undefined) {
+                            e_2 = 'We weren\'t able to encrypt your password. Please try again later.';
+                        }
+                        res.status(404).redirect("/students/settings?error=" + encodeURIComponent(e_2));
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
+                }
+            });
+        }); });
+    }
+    else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+server.get('/students/logout', function (req, res) {
+    if (req.session.logged) {
+        req.session.destroy();
+        res.status(200).redirect('/students/signin');
+    }
+    else {
+        res.status(401).redirect('/students/signin');
+    }
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

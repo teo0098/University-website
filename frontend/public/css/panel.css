@@ -314,7 +314,6 @@ body {
 }
 
 .panelData__table {
-  background: #FF7F50;
   border-radius: 0.2vh;
   box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
   border-spacing: 2vw 3vh;
@@ -323,7 +322,7 @@ body {
 .panelData__col {
   color: #0e0e0e;
   padding: 1vh;
-  border-bottom: 0.1vh solid #0e0e0e;
+  border-bottom: 0.1vh solid rgba(24, 23, 23, 0.753);
   font-size: 1.2vw;
 }
 
@@ -347,6 +346,7 @@ body {
 .panelData__error {
   color: crimson;
   margin: 2vh 0;
+  font-size: 2vw;
   text-align: center;
 }
 
@@ -408,6 +408,7 @@ body {
   padding: 1vh;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2vh;
 }
 
 .panelData__h3 {
@@ -423,12 +424,20 @@ body {
 .signup__form {
   min-width: 80%;
   box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
-  padding: 5vh;
+  padding: 2vh;
   color: rgba(24, 23, 23, 0.753);
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 2vh 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+.signup__form--active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .signup__div {
@@ -475,6 +484,18 @@ body {
   color: rgba(24, 23, 23, 0.753);
   border-top: none;
   box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
+}
+
+.signup__successIcon {
+  font-size: 5vw;
+  color: #32CD32;
+  margin: 2vh 0;
+}
+
+.signup__successName {
+  text-align: center;
+  color: #32CD32;
+  font-size: 2vw;
 }
 
 /*# sourceMappingURL=panel.css.map */

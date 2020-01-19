@@ -5,7 +5,6 @@ import pool from './dbconnection';
 import bodyParser from 'body-parser';
 import mail from './sendEmail';
 import session from 'express-session';
-import cookie from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 
 const server: express.Application = express();
@@ -29,7 +28,6 @@ pool.getConnection((error, connection) => {
 });
 
 server.use(session( { secret: process.env.SECRET_SESSION_KEY, resave: false, saveUninitialized: false , maxAge:  86400000 * 7 } )); //Date.now() +
-server.use(cookie());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
 server.set('views', path.join(__dirname, '../frontend/templates/views'));
@@ -248,7 +246,7 @@ server.get('/students/grades', (req, res) => {
         let error: string | null = null;
         pool.query(queryMajors, (err, result) => {
             if (err) {
-                error = 'There has been problem with database occured, please try again later.';
+                error = 'There has been problem with the database occured, please try again later.';
             }
             const splitArray: Array<Array<string>> = [];
             if (req.query.data) {
@@ -283,7 +281,7 @@ server.get('/students/info', (req, res) => {
                         WHERE m.major_name = ? AND s.student_email = "${(<any>req).session.logged[6].value}"`;
         pool.query(select, [`${req.query.major}`], (err, result) => {
             if (err) {
-                res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
+                res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
             } else {
                 if (result[0].semnumber < req.query.semester) {
                     res.status(404).redirect(`/students/grades?error=${encodeURIComponent('You have not reached that semester yet.')}`);
@@ -296,7 +294,7 @@ server.get('/students/info', (req, res) => {
                                      AND m.major_name = ? AND m_s.semnumber = ?`;
                     pool.query(select2, [`${req.query.major}`, req.query.semester], (err2, result2) => {
                         if (err2) {
-                            res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with database occured, please try again later.')}`);
+                            res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
                         } else {
                             let data: string = '';
                             for (const obj of result2) {
@@ -318,7 +316,9 @@ server.get('/students/info', (req, res) => {
 server.get('/students/settings', (req, res) => {
     if ((<any>req).session.logged) {
         res.status(200).render('settings', {
-            student_data: (<any>req).session.logged
+            student_data: (<any>req).session.logged,
+            error: req.query.error,
+            success: req.query.success
         });
     } else {
         res.status(401).redirect('/students/signin');
@@ -326,7 +326,49 @@ server.get('/students/settings', (req, res) => {
 });
 
 server.post('/students/alteration', (req, res) => {
-    
+    if ((<any>req).session.logged) {
+        const select = `SELECT student_password FROM students WHERE student_email = ?`;
+        pool.query(select, [`${(<any>req).session.logged[6].value}`], async (err, result) => {
+            try {
+                if (err) {
+                    throw 'There has been problem with the database occured, please try again later.';
+                } else {
+                    const match = await bcrypt.compare(req.body.password, result[0].student_password);
+                    if (!match) {
+                        throw 'You have entered incorrect current password';
+                    } else {
+                        const hash = await bcrypt.hash(req.body.newpassword, 10);
+                        req.body.newpassword = hash;
+                        const update = `UPDATE students SET student_password = ?
+                                        WHERE student_email = "${(<any>req).session.logged[6].value}"`;
+                        pool.query(update, [`${req.body.newpassword}`], (err2) => {
+                            if (err2) {
+                                throw 'There has been problem with the database occured, please try again later.';
+                            } else {
+                                res.status(201).redirect(`/students/settings?success=${encodeURIComponent('Password has been successfully updated')}`);
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                if (e === null || e === undefined) {
+                    e = 'We weren\'t able to encrypt your password. Please try again later.';
+                }
+                res.status(404).redirect(`/students/settings?error=${encodeURIComponent(e)}`);
+            }
+        });
+    } else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+
+server.get('/students/logout', (req, res) => {
+    if ((<any>req).session.logged) {
+        (<any>req).session.destroy();
+        res.status(200).redirect('/students/signin');
+    } else {
+        res.status(401).redirect('/students/signin');
+    }
 });
 
 server.listen(port, () => {

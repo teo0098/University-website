@@ -39,26 +39,28 @@
                 <i class="fas fa-exclamation-triangle panelData__errorIcon"></i>
                 <h1 class="panelData__error">{{info_error}}</h1>
             {{else}}
-                <table class="panelData__table">
-                    <tr class="panelData__tr">
-                        <th class="panelData__col panelData__th">Major name</th>
-                        <th class="panelData__col panelData__th">Semester number</th>
-                        <th class="panelData__col panelData__th">Subject name</th>
-                        <th class="panelData__col panelData__th">Subject type</th>
-                        <th class="panelData__col panelData__th">Teacher</th>
-                        <th class="panelData__col panelData__th">Teacher degree</th>
-                    </tr>
-                    {{#each info_data as |info|}}
+                {{#if info_data}}
+                    <table class="panelData__table">
                         <tr class="panelData__tr">
-                            <td class="panelData__col panelData__td">{{info.[0]}}</td>
-                            <td class="panelData__col panelData__td">{{info.[1]}}</td>
-                            <td class="panelData__col panelData__td">{{info.[2]}}</td>
-                            <td class="panelData__col panelData__td">{{info.[3]}}</td>
-                            <td class="panelData__col panelData__td">{{info.[4]}} {{info.[5]}}</td>
-                            <td class="panelData__col panelData__td">{{info.[6]}}</td>
+                            <th class="panelData__col panelData__th">Major name</th>
+                            <th class="panelData__col panelData__th">Semester number</th>
+                            <th class="panelData__col panelData__th">Subject name</th>
+                            <th class="panelData__col panelData__th">Subject type</th>
+                            <th class="panelData__col panelData__th">Teacher</th>
+                            <th class="panelData__col panelData__th">Teacher degree</th>
                         </tr>
-                    {{/each}}
-                </table>
+                        {{#each info_data as |info|}}
+                            <tr class="panelData__tr">
+                                <td class="panelData__col panelData__td">{{info.[0]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[1]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[2]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[3]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[4]}} {{info.[5]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[6]}}</td>
+                            </tr>
+                        {{/each}}
+                    </table>
+                {{/if}}
             {{/if}}
         {{/if}}
     </div>

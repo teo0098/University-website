@@ -1,7 +1,12 @@
 import setResponsive from './respMenu';
 import validation from './signup';
+import $ from 'jquery';
 
 setResponsive();
+
+$('.panelData__h3').on('click', () => {
+    $('.signup__form').toggleClass('signup__form--active');
+});
 
 type Obj = { name: string, valid: boolean };
 
