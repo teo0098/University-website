@@ -76,7 +76,7 @@ server.post('/students/registration', (req, res) => {
     pool.query(select, [req.body.pin, req.body.phone, req.body.email], async (error, result) => {
         if (error) {
             const string: string = encodeURIComponent('Unable to connect to the database, please try again later.');
-            res.status(404).redirect(`/students/signup?queryy=${string}`); 
+            res.status(404).redirect(`/students/signup?queryy=${string}`);
         } else {
             if (result[0].length === 0 && result[1].length === 0 && result[2].length === 0) {
                 try {
@@ -85,9 +85,9 @@ server.post('/students/registration', (req, res) => {
                     const user = req.body;
                     const data = {
                         student_id: null, student_name: user.name.toLowerCase(), student_lastname: user.lastname.toLowerCase(),
-                        student_sex: user.sex, student_PIN: user.pin, student_birthdate: user.birthdate, 
+                        student_sex: user.sex, student_PIN: user.pin, student_birthdate: user.birthdate,
                         student_phonenumber: user.phone, student_email: user.email, student_zipcode: user.zipcode,
-                        student_location: user.location.toLowerCase(), student_apartmentnumber: user.apartment, 
+                        student_location: user.location.toLowerCase(), student_apartmentnumber: user.apartment,
                         student_street: user.street.toLowerCase(), student_password: user.password
                     };
                     const insert = `INSERT INTO students SET ?`;
@@ -99,7 +99,7 @@ server.post('/students/registration', (req, res) => {
                             mail.sendWelcomeMessage(user.email, user.name);
                             mail.sendDecisionMessage(user.name, user.lastname, user.pin, process.env.DECISION_KEY, user.email, user.major);
                             res.status(201).redirect(`/students/signup?success=${
-                            encodeURIComponent(`We sent you an welcome email to your mailbox. Check it out. 
+                            encodeURIComponent(`We sent you an welcome email to your mailbox. Check it out.
                             It is possible that our email got into spam folder.`)}`);
                         }
                     });
@@ -117,11 +117,11 @@ server.post('/students/registration', (req, res) => {
                 if (result[1].length > 0) {
                     query = encodeURIComponent(' ');
                     phone = encodeURIComponent('This phone number already exists in the database.');
-                } 
+                }
                 if (result[2].length > 0) {
                     query = encodeURIComponent(' ');
                     email = encodeURIComponent('This email already exists in the database.');
-                } 
+                }
                 res.status(403).redirect(`/students/signup?queryy=${query}&pin=${pin}&phone=${phone}&email=${email}`);
             }
         }
@@ -203,17 +203,17 @@ server.post('/students/login', (req, res) => {
                         const date = new Date(result[0].student_birthdate);
                         const dateOfBirth = date.toLocaleDateString();
                         const sex = result[0].student_sex === 'M' ? 'Man' : 'Woman';
-                        const student = [ 
+                        const student = [
                             {key: 'Name', value: result[0].student_name},
-                            {key: 'Last name', value: result[0].student_lastname}, 
+                            {key: 'Last name', value: result[0].student_lastname},
                             {key: 'Sex', value: sex},
-                            {key: 'Personal identity number', value: result[0].student_PIN}, 
-                            {key: 'Date of birth', value: dateOfBirth}, 
+                            {key: 'Personal identity number', value: result[0].student_PIN},
+                            {key: 'Date of birth', value: dateOfBirth},
                             {key: 'Phone number', value: result[0].student_phonenumber},
-                            {key: 'Email', value: result[0].student_email}, 
-                            {key: 'Postal code', value: result[0].student_zipcode}, 
+                            {key: 'Email', value: result[0].student_email},
+                            {key: 'Postal code', value: result[0].student_zipcode},
                             {key: 'Living place', value: result[0].student_location},
-                            {key: 'Apartment/home number', value: result[0].student_apartmentnumber}, 
+                            {key: 'Apartment/home number', value: result[0].student_apartmentnumber},
                             {key: 'Street', value: result[0].student_street}
                         ];
                         (<any>req).session.logged = student;
@@ -289,8 +289,8 @@ server.get('/students/info', (req, res) => {
                     const select2 = `SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,
                                      t.teacher_name, t.teacher_lastname, t.teacher_degree
                                      FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
-                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id 
-                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id 
+                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id
+                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id
                                      AND m.major_name = ? AND m_s.semnumber = ?`;
                     pool.query(select2, [`${req.query.major}`, req.query.semester], (err2, result2) => {
                         if (err2) {
