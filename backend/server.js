@@ -143,7 +143,7 @@ server.post('/students/registration', function (req, res) {
                         else {
                             sendEmail_1.default.sendWelcomeMessage(user_1.email, user_1.name);
                             sendEmail_1.default.sendDecisionMessage(user_1.name, user_1.lastname, user_1.pin, process.env.DECISION_KEY, user_1.email, user_1.major);
-                            res.status(201).redirect("/students/signup?success=" + encodeURIComponent("We sent you an welcome email to your mailbox. Check it out. \n                            It is possible that our email got into spam folder."));
+                            res.status(201).redirect("/students/signup?success=" + encodeURIComponent("We sent you an welcome email to your mailbox. Check it out.\n                            It is possible that our email got into spam folder."));
                         }
                     });
                     return [3 /*break*/, 5];
@@ -339,7 +339,7 @@ server.get('/students/info', function (req, res) {
                     res.status(404).redirect("/students/grades?error=" + encodeURIComponent('You have not reached that semester yet.'));
                 }
                 else {
-                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id \n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id \n                                     AND m.major_name = ? AND m_s.semnumber = ?";
+                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id\n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id\n                                     AND m.major_name = ? AND m_s.semnumber = ?";
                     dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester], function (err2, result2) {
                         if (err2) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
