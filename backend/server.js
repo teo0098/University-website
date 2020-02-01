@@ -340,20 +340,22 @@ server.get('/students/info', function (req, res) {
                     res.status(404).redirect("/students/grades?error=" + encodeURIComponent('You have not reached that semester yet.'));
                 }
                 else {
-                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id\n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id\n                                     AND m.major_name = ? AND m_s.semnumber = ?";
-                    dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester], function (err2, result2) {
+                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id\n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id\n                                     AND m.major_name = ? AND m_s.semnumber = ?;\n                                     SELECT s_s.grade FROM students_subjects s_s\n                                     JOIN students s ON s.student_id = s_s.student_id\n                                     WHERE s_s.semnumber = ? AND s.student_email=?";
+                    dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester, req.query.semester, "" + req.session.logged[6].value], function (err2, result2) {
                         if (err2) {
                             res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
                         }
                         else {
-                            var data = '';
-                            for (var _i = 0, result2_1 = result2; _i < result2_1.length; _i++) {
-                                var obj = result2_1[_i];
-                                for (var key in obj) {
-                                    data += "data=" + encodeURIComponent(obj[key]) + "&";
+                            res.send({ outcome: result2 });
+                            /*
+                            let data: string = '';
+                            for (const obj of result2[0]) {
+                                for (let key in obj) {
+                                    data += `data=${encodeURIComponent(obj[key])}&`;
                                 }
                             }
-                            res.status(200).redirect("/students/grades?" + data);
+                            res.status(200).redirect(`/students/grades?${data}`);
+                            */
                         }
                     });
                 }
