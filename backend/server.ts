@@ -292,19 +292,26 @@ server.get('/students/info', (req, res) => {
                                      FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s
                                      WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id
                                      AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id
-                                     AND m.major_name = ? AND m_s.semnumber = ?`;
-                    pool.query(select2, [`${req.query.major}`, req.query.semester], (err2, result2) => {
-                        if (err2) {
-                            res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
-                        } else {
-                            let data: string = '';
-                            for (const obj of result2) {
-                                for (let key in obj) {
-                                    data += `data=${encodeURIComponent(obj[key])}&`;
+                                     AND m.major_name = ? AND m_s.semnumber = ?;
+                                     SELECT s_s.grade FROM students_subjects s_s
+                                     JOIN students s ON s.student_id = s_s.student_id
+                                     WHERE s_s.semnumber = ? AND s.student_email=?`;
+                    pool.query(select2, [`${req.query.major}`, req.query.semester, req.query.semester, `${(<any>req).session.logged[6].value}`],
+                        (err2, result2) => {
+                            if (err2) {
+                                res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
+                            } else {
+                                res.send({outcome: result2});
+                                /*
+                                let data: string = '';
+                                for (const obj of result2[0]) {
+                                    for (let key in obj) {
+                                        data += `data=${encodeURIComponent(obj[key])}&`;
+                                    }
                                 }
+                                res.status(200).redirect(`/students/grades?${data}`);
+                                */
                             }
-                            res.status(200).redirect(`/students/grades?${data}`);
-                        }
                     });
                 }
             }
