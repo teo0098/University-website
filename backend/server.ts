@@ -253,7 +253,7 @@ server.get('/students/grades', (req, res) => {
             if (req.query.data) {
                 let holdArray: Array<string> = [];
                 for (let i = 0; i < req.query.data.length; i++) {
-                    if (i % 7 === 0 && i > 0) {
+                    if (i % 8 === 0 && i > 0) {
                         splitArray.push(holdArray);
                         holdArray = [];
                     }
@@ -293,24 +293,42 @@ server.get('/students/info', (req, res) => {
                                      WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id
                                      AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id
                                      AND m.major_name = ? AND m_s.semnumber = ?;
-                                     SELECT s_s.grade FROM students_subjects s_s
+                                     SELECT s_s.grade, su.subject_name FROM students_subjects s_s
                                      JOIN students s ON s.student_id = s_s.student_id
+                                     JOIN subjects su ON su.subject_id = s_s.subject_id
                                      WHERE s_s.semnumber = ? AND s.student_email=?`;
                     pool.query(select2, [`${req.query.major}`, req.query.semester, req.query.semester, `${(<any>req).session.logged[6].value}`],
                         (err2, result2) => {
                             if (err2) {
                                 res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
                             } else {
-                                res.send({outcome: result2});
-                                /*
                                 let data: string = '';
                                 for (const obj of result2[0]) {
                                     for (let key in obj) {
                                         data += `data=${encodeURIComponent(obj[key])}&`;
                                     }
                                 }
+                                if (result2[1].length > 0) {
+                                    for (let i: number = 0; i < result2[0].length; i++) {
+                                        const subject = result2[1].find(subject => subject.subject_name === result2[0][i].subject_name);
+                                        let grade: string | number;
+                                        if (typeof subject === "undefined") {
+                                            grade = "Not assigned";
+                                        } else {
+                                            grade = subject.grade;
+                                        }
+                                        result2[0][i] = {
+                                            ...result2[0][i],
+                                            grade
+                                        };
+                                    }
+                                } 
+                                else {
+                                    for (let i = 0; i < result2[0].length; i++) {
+                                        data += `data=${encodeURIComponent("Not assigned")}&`;
+                                    }
+                                }
                                 res.status(200).redirect(`/students/grades?${data}`);
-                                */
                             }
                     });
                 }
@@ -359,7 +377,7 @@ server.post('/students/alteration', (req, res) => {
                     }
                 }
             } catch (e) {
-                if (typeof e === null || typeof e === undefined) {
+                if (typeof e === null || typeof e === "undefined") {
                     e = 'We weren\'t able to encrypt your password. Please try again later.';
                 }
                 res.status(404).redirect(`/students/settings?error=${encodeURIComponent(e)}`);

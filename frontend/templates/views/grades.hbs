@@ -48,6 +48,7 @@
                             <th class="panelData__col panelData__th">Subject type</th>
                             <th class="panelData__col panelData__th">Teacher</th>
                             <th class="panelData__col panelData__th">Teacher degree</th>
+                            <th class="panelData__col panelData__th">Grade</th>
                         </tr>
                         {{#each info_data as |info|}}
                             <tr class="panelData__tr">
@@ -57,6 +58,7 @@
                                 <td class="panelData__col panelData__td">{{info.[3]}}</td>
                                 <td class="panelData__col panelData__td">{{info.[4]}} {{info.[5]}}</td>
                                 <td class="panelData__col panelData__td">{{info.[6]}}</td>
+                                <td class="panelData__col panelData__td">{{info.[7]}}</td>
                             </tr>
                         {{/each}}
                     </table>
