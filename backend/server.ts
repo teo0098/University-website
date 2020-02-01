@@ -181,7 +181,8 @@ server.get('/students/signin', (req, res) => {
     } else {
         res.status(200).render('signin', {
             error: req.query.error,
-            errorMessage
+            errorMessage,
+            success: req.query.success
         });
     }
 });
@@ -351,7 +352,7 @@ server.post('/students/alteration', (req, res) => {
                     }
                 }
             } catch (e) {
-                if (e === null || e === undefined) {
+                if (typeof e === null || typeof e === undefined) {
                     e = 'We weren\'t able to encrypt your password. Please try again later.';
                 }
                 res.status(404).redirect(`/students/settings?error=${encodeURIComponent(e)}`);
@@ -369,6 +370,26 @@ server.get('/students/logout', (req, res) => {
     } else {
         res.status(401).redirect('/students/signin');
     }
+});
+
+server.post('/students/removal', (req, res) => {
+    if ((<any>req).session.logged) {
+        const update = `UPDATE students SET student_accepted="NO" WHERE student_email="${req.body.deleted}"`;
+        pool.query(update, (err) => {
+            if (err) {
+                res.status(404).redirect(`/students/settings?error=${encodeURIComponent("Unable to delete your account. Please try again later.")}`);
+            } else {
+                (<any>req).session.destroy();
+                res.status(201).redirect(`/students/signin?success=${encodeURIComponent('Your account has been successfully deleted')}`);
+            }
+        });
+    } else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+
+server.get('*', (req, res) => {
+    res.status(404).redirect('/');
 });
 
 server.listen(port, () => {

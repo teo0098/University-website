@@ -230,7 +230,8 @@ server.get('/students/signin', function (req, res) {
     else {
         res.status(200).render('signin', {
             error: req.query.error,
-            errorMessage: errorMessage
+            errorMessage: errorMessage,
+            success: req.query.success
         });
     }
 });
@@ -408,7 +409,7 @@ server.post('/students/alteration', function (req, res) {
                     case 5: return [3 /*break*/, 7];
                     case 6:
                         e_2 = _a.sent();
-                        if (e_2 === null || e_2 === undefined) {
+                        if (typeof e_2 === null || typeof e_2 === undefined) {
                             e_2 = 'We weren\'t able to encrypt your password. Please try again later.';
                         }
                         res.status(404).redirect("/students/settings?error=" + encodeURIComponent(e_2));
@@ -430,6 +431,26 @@ server.get('/students/logout', function (req, res) {
     else {
         res.status(401).redirect('/students/signin');
     }
+});
+server.post('/students/removal', function (req, res) {
+    if (req.session.logged) {
+        var update = "UPDATE students SET student_accepted=\"NO\" WHERE student_email=\"" + req.body.deleted + "\"";
+        dbconnection_1.default.query(update, function (err) {
+            if (err) {
+                res.status(404).redirect("/students/settings?error=" + encodeURIComponent("Unable to delete your account. Please try again later."));
+            }
+            else {
+                req.session.destroy();
+                res.status(201).redirect("/students/signin?success=" + encodeURIComponent('Your account has been successfully deleted'));
+            }
+        });
+    }
+    else {
+        res.status(401).redirect('/students/signin');
+    }
+});
+server.get('*', function (req, res) {
+    res.status(404).redirect('/');
 });
 server.listen(port, function () {
     console.log("Server running on port " + port);

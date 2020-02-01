@@ -14,38 +14,14 @@
     {{>menu2}}
     {{>student_panel}}
     <div class="panelData">
+        {{>changePass}}
         <div class="panelData__div">
-            <h3 class="panelData__h3">Change my password</h3>
-            <i class="fas fa-edit panelData__icon"></i>
+            <h3 class="panelData__h3 panelData__h3--delete">Delete my account</h3>
+            <i class="fas fa-user-minus panelData__icon"></i>
         </div>
-        {{#if error}}
-            <i class="fas fa-exclamation-triangle panelData__errorIcon"></i>
-            <h1 class="panelData__error">{{error}}</h1>
-        {{else}}
-            {{#if success}}
-                <i class="fas fa-check-circle signup__successIcon"></i>
-                <h2 class="signup__successName">{{success}}</h2>
-            {{/if}}
-        {{/if}}
-        <form class="signup__form" action="/students/alteration" method="POST">
-            <div class="signup__div">
-                <section class="signup__data">
-                    <h4 class="signup__h4">Current password:</h4>
-                    <input type="password" name="password" id="oldpassword" class="signup__input">
-                </section>
-                <section class="signup__data">
-                    <h4 class="signup__h4">New password:</h4>
-                    <input type="password" name="newpassword" id="password" class="signup__input">
-                    <span class="signup__error signup__password">From 8 up to 30 characters. 
-                    Allowed characters: letters, numbers, @#!$*-_^&<strong>.</strong>,</span>
-                </section>
-                <section class="signup__data">
-                    <h4 class="signup__h4">Repeat new password:</h4>
-                    <input type="password" name="rnewpassword" id="repeatPass" class="signup__input">
-                    <span class="signup__error signup__repeatPass">Passwords must be the same</span>
-                </section>
-            </div>
-            <button class="panelData__btn panelData__btn--change">Change</button>
+        <form class="signup__form signup__form--delete" action="/students/removal" method="POST">
+            <input type="email" name="deleted" value="{{student_data.[6].value}}" hidden>
+            <button class="panelData__btn panelData__btn--delete">Delete</button>
         </form>
     </div>
     <script src="/src/settings.js"></script>

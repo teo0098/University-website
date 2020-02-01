@@ -423,8 +423,9 @@ body {
 
 .signup__form {
   min-width: 80%;
+  height: 0;
   box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
-  padding: 2vh;
+  padding: 0;
   color: rgba(24, 23, 23, 0.753);
   display: flex;
   flex-direction: column;
@@ -433,9 +434,12 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease-out;
+  overflow: hidden;
 }
 
-.signup__form--active {
+.signup__form--change-active, .signup__form--delete-active {
+  height: auto;
+  padding: 2vh;
   opacity: 1;
   pointer-events: auto;
 }
@@ -467,14 +471,18 @@ body {
   letter-spacing: 0.1vw;
 }
 
-.panelData__btn--change {
+.panelData__btn--change, .panelData__btn--delete {
   margin: 2vh 0;
 }
 
-.panelData__btn--change:hover::after {
+.panelData__btn--change:hover::after, .panelData__btn--delete:hover::after {
   content: "Change";
   height: 100%;
   color: rgba(24, 23, 23, 0.753);
+}
+
+.panelData__btn--delete:hover::after {
+  content: "Delete";
 }
 
 .signup__error {
