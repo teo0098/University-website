@@ -358,12 +358,6 @@ server.get('/students/info', function (req, res) {
                         }
                         else {
                             var data = '';
-                            for (var _i = 0, _a = result2[0]; _i < _a.length; _i++) {
-                                var obj = _a[_i];
-                                for (var key in obj) {
-                                    data += "data=" + encodeURIComponent(obj[key]) + "&";
-                                }
-                            }
                             if (result2[1].length > 0) {
                                 var _loop_1 = function (i) {
                                     var subject = result2[1].find(function (subject) { return subject.subject_name === result2[0][i].subject_name; });
@@ -382,7 +376,13 @@ server.get('/students/info', function (req, res) {
                             }
                             else {
                                 for (var i = 0; i < result2[0].length; i++) {
-                                    data += "data=" + encodeURIComponent("Not assigned") + "&";
+                                    result2[0][i] = __assign(__assign({}, result2[0][i]), { grade: "Not assigned" });
+                                }
+                            }
+                            for (var _i = 0, _a = result2[0]; _i < _a.length; _i++) {
+                                var obj = _a[_i];
+                                for (var key in obj) {
+                                    data += "data=" + encodeURIComponent(obj[key]) + "&";
                                 }
                             }
                             res.status(200).redirect("/students/grades?" + data);

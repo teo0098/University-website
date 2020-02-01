@@ -303,11 +303,6 @@ server.get('/students/info', (req, res) => {
                                 res.status(404).redirect(`/students/grades?error=${encodeURIComponent('There has been problem with the database occured, please try again later.')}`);
                             } else {
                                 let data: string = '';
-                                for (const obj of result2[0]) {
-                                    for (let key in obj) {
-                                        data += `data=${encodeURIComponent(obj[key])}&`;
-                                    }
-                                }
                                 if (result2[1].length > 0) {
                                     for (let i: number = 0; i < result2[0].length; i++) {
                                         const subject = result2[1].find(subject => subject.subject_name === result2[0][i].subject_name);
@@ -325,7 +320,15 @@ server.get('/students/info', (req, res) => {
                                 } 
                                 else {
                                     for (let i = 0; i < result2[0].length; i++) {
-                                        data += `data=${encodeURIComponent("Not assigned")}&`;
+                                       result2[0][i] = {
+                                        ...result2[0][i],
+                                        grade: "Not assigned"
+                                       };
+                                    }
+                                }
+                                for (const obj of result2[0]) {
+                                    for (let key in obj) {
+                                        data += `data=${encodeURIComponent(obj[key])}&`;
                                     }
                                 }
                                 res.status(200).redirect(`/students/grades?${data}`);
