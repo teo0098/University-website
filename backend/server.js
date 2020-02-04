@@ -1,51 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -55,9 +8,15 @@ var path_1 = __importDefault(require("path"));
 var hbs_1 = __importDefault(require("hbs"));
 var dbconnection_1 = __importDefault(require("./dbconnection"));
 var body_parser_1 = __importDefault(require("body-parser"));
-var sendEmail_1 = __importDefault(require("./sendEmail"));
 var express_session_1 = __importDefault(require("express-session"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
+var students_1 = __importDefault(require("./routes/students"));
+var students_registration_1 = __importDefault(require("./routes/students_registration"));
+var students_decision_1 = __importDefault(require("./routes/students_decision"));
+var students_login_1 = __importDefault(require("./routes/students_login"));
+var students_panel_1 = __importDefault(require("./routes/students_panel"));
+var students_grades_1 = __importDefault(require("./routes/students_grades"));
+var students_settings_1 = __importDefault(require("./routes/students_settings"));
+var students_logout_1 = __importDefault(require("./routes/students_logout"));
 var server = express_1.default();
 var port = process.env.PORT;
 var errorMessage = null;
@@ -85,19 +44,19 @@ server.set('views', path_1.default.join(__dirname, '../frontend/templates/views'
 server.set('view engine', 'hbs');
 hbs_1.default.registerPartials(path_1.default.join(__dirname, '../frontend/templates/partials'));
 server.use(express_1.default.static(path_1.default.join(__dirname, '../frontend/public')));
+server.use(students_1.default);
+server.use(students_registration_1.default);
+server.use(students_decision_1.default);
+server.use(students_login_1.default);
+server.use(students_panel_1.default);
+server.use(students_grades_1.default);
+server.use(students_settings_1.default);
+server.use(students_logout_1.default);
 server.get('', function (req, res) {
     res.status(200).render('index', {
         errorMessage: errorMessage,
         majors: majors
     });
-});
-server.get('/students', function (req, res) {
-    if (req.session.logged) {
-        res.status(401).redirect('/students/panel');
-    }
-    else {
-        res.status(200).render('students');
-    }
 });
 server.get('/students/signup', function (req, res) {
     if (req.session.logged) {
@@ -118,122 +77,6 @@ server.get('/students/signup', function (req, res) {
         });
     }
 });
-server.post('/students/registration', function (req, res) {
-    var select = "SELECT * FROM students WHERE student_PIN=?;\n                    SELECT * FROM students WHERE student_phonenumber=?;\n                    SELECT * FROM students WHERE student_email=?";
-    dbconnection_1.default.query(select, [req.body.pin, req.body.phone, req.body.email], function (error, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var string, hash, user_1, data, insert, e_1, pin, phone, email, query;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!error) return [3 /*break*/, 1];
-                    string = encodeURIComponent('Unable to connect to the database, please try again later.');
-                    res.status(404).redirect("/students/signup?queryy=" + string);
-                    return [3 /*break*/, 7];
-                case 1:
-                    if (!(result[0].length === 0 && result[1].length === 0 && result[2].length === 0)) return [3 /*break*/, 6];
-                    _a.label = 2;
-                case 2:
-                    _a.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, bcryptjs_1.default.hash(req.body.password, 10)];
-                case 3:
-                    hash = _a.sent();
-                    req.body.password = hash;
-                    user_1 = req.body;
-                    data = {
-                        student_id: null, student_name: user_1.name.toLowerCase(), student_lastname: user_1.lastname.toLowerCase(),
-                        student_sex: user_1.sex, student_PIN: user_1.pin, student_birthdate: user_1.birthdate,
-                        student_phonenumber: user_1.phone, student_email: user_1.email, student_zipcode: user_1.zipcode,
-                        student_location: user_1.location.toLowerCase(), student_apartmentnumber: user_1.apartment,
-                        student_street: user_1.street.toLowerCase(), student_password: user_1.password
-                    };
-                    insert = "INSERT INTO students SET ?";
-                    dbconnection_1.default.query(insert, data, function (err) {
-                        if (err) {
-                            res.status(500).redirect("/students/signup?queryy=\n                            " + encodeURIComponent('We weren\'t able to create your account. Please try again later.'));
-                        }
-                        else {
-                            sendEmail_1.default.sendWelcomeMessage(user_1.email, user_1.name);
-                            sendEmail_1.default.sendDecisionMessage(user_1.name, user_1.lastname, user_1.pin, process.env.DECISION_KEY, user_1.email, user_1.major);
-                            res.status(201).redirect("/students/signup?success=" + encodeURIComponent("We sent you an welcome email to your mailbox. Check it out.\n                            It is possible that our email got into spam folder."));
-                        }
-                    });
-                    return [3 /*break*/, 5];
-                case 4:
-                    e_1 = _a.sent();
-                    res.status(404).redirect("/students/signup?queryy=\n                    " + encodeURIComponent('We weren\'t able to encrypt your password. Please try again later.'));
-                    return [3 /*break*/, 5];
-                case 5: return [3 /*break*/, 7];
-                case 6:
-                    pin = '', phone = '', email = '', query = '';
-                    if (result[0].length > 0) {
-                        query = encodeURIComponent(' ');
-                        pin = encodeURIComponent('This personal identity number already exists in the database.');
-                    }
-                    if (result[1].length > 0) {
-                        query = encodeURIComponent(' ');
-                        phone = encodeURIComponent('This phone number already exists in the database.');
-                    }
-                    if (result[2].length > 0) {
-                        query = encodeURIComponent(' ');
-                        email = encodeURIComponent('This email already exists in the database.');
-                    }
-                    res.status(403).redirect("/students/signup?queryy=" + query + "&pin=" + pin + "&phone=" + phone + "&email=" + email);
-                    _a.label = 7;
-                case 7: return [2 /*return*/];
-            }
-        });
-    }); });
-});
-server.get('/students/acception', function (req, res) {
-    if (req.query.decision === process.env.DECISION_KEY) {
-        var update = "UPDATE students SET student_accepted='YES' WHERE student_PIN=?";
-        dbconnection_1.default.query(update, ["" + req.query.pin], function (err1) {
-            if (err1) {
-                res.status(404).send({ error: 'Not updated' });
-            }
-            else {
-                var selectID = "SELECT * FROM students WHERE student_PIN=?;\n                          SELECT * FROM majors WHERE major_name=?";
-                dbconnection_1.default.query(selectID, [req.query.pin, req.query.major], function (err2, result) {
-                    if (err2) {
-                        res.status(404).send({ error: 'No id selected' });
-                    }
-                    else {
-                        var insert = "INSERT INTO students_majors VALUES(NULL, " + result[1][0].major_id + ", " + result[0][0].student_id + ", 1)";
-                        dbconnection_1.default.query(insert, function (err3) {
-                            if (err3) {
-                                res.status(404).send({ error: 'Not inserted' });
-                            }
-                            else {
-                                sendEmail_1.default.sendAcceptionMessage(req.query.email, req.query.name);
-                                res.status(201).send({ success: 'Accepted' });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signup');
-    }
-});
-server.get('/students/rejection', function (req, res) {
-    if (req.query.decision === process.env.DECISION_KEY) {
-        var deletee = "DELETE FROM students WHERE student_PIN=?";
-        dbconnection_1.default.query(deletee, ["" + req.query.pin], function (err) {
-            if (err) {
-                res.status(404).send({ error: 'Not deleted' });
-            }
-            else {
-                sendEmail_1.default.sendRejectionMessage(req.query.email, req.query.name);
-                res.status(201).send({ success: 'Deleted' });
-            }
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signup');
-    }
-});
 server.get('/students/signin', function (req, res) {
     if (req.session.logged) {
         res.status(401).redirect('/students/panel');
@@ -244,241 +87,6 @@ server.get('/students/signin', function (req, res) {
             errorMessage: errorMessage,
             success: req.query.success
         });
-    }
-});
-server.post('/students/login', function (req, res) {
-    var select = "SELECT * FROM students WHERE student_email=? AND student_accepted='YES'";
-    dbconnection_1.default.query(select, [req.body.email], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-        var match, date, dateOfBirth, sex, student, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    if (!err) return [3 /*break*/, 1];
-                    throw 'Unable to connect to the database, please try again later.';
-                case 1:
-                    if (!(result.length === 0)) return [3 /*break*/, 2];
-                    throw 'Email or password is incorrect';
-                case 2: return [4 /*yield*/, bcryptjs_1.default.compare(req.body.password, result[0].student_password)];
-                case 3:
-                    match = _a.sent();
-                    if (!match) {
-                        throw 'Email or password is incorrect';
-                    }
-                    else {
-                        date = new Date(result[0].student_birthdate);
-                        dateOfBirth = date.toLocaleDateString();
-                        sex = result[0].student_sex === 'M' ? 'Man' : 'Woman';
-                        student = [
-                            { key: 'Name', value: result[0].student_name },
-                            { key: 'Last name', value: result[0].student_lastname },
-                            { key: 'Sex', value: sex },
-                            { key: 'Personal identity number', value: result[0].student_PIN },
-                            { key: 'Date of birth', value: dateOfBirth },
-                            { key: 'Phone number', value: result[0].student_phonenumber },
-                            { key: 'Email', value: result[0].student_email },
-                            { key: 'Postal code', value: result[0].student_zipcode },
-                            { key: 'Living place', value: result[0].student_location },
-                            { key: 'Apartment/home number', value: result[0].student_apartmentnumber },
-                            { key: 'Street', value: result[0].student_street }
-                        ];
-                        req.session.logged = student;
-                        res.status(200).redirect('/students/panel');
-                    }
-                    _a.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    error_1 = _a.sent();
-                    res.status(404).redirect("/students/signin?error=" + encodeURIComponent(error_1));
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
-    }); });
-});
-server.get('/students/panel', function (req, res) {
-    if (req.session.logged) {
-        res.status(200).render('panel', {
-            student_data: req.session.logged
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.get('/students/grades', function (req, res) {
-    if (req.session.logged) {
-        var queryMajors = "SELECT majors.major_name, students_majors.semnumber FROM majors\n                             JOIN students_majors ON majors.major_id = students_majors.major_id\n                             JOIN students ON students.student_id = students_majors.student_id\n                             WHERE students.student_email = \"" + req.session.logged[6].value + "\";";
-        var error_2 = null;
-        dbconnection_1.default.query(queryMajors, function (err, result) {
-            if (err) {
-                error_2 = 'There has been problem with the database occured, please try again later.';
-            }
-            var splitArray = [];
-            if (req.query.data) {
-                var holdArray = [];
-                for (var i = 0; i < req.query.data.length; i++) {
-                    if (i % 8 === 0 && i > 0) {
-                        splitArray.push(holdArray);
-                        holdArray = [];
-                    }
-                    holdArray.push(req.query.data[i]);
-                }
-                splitArray.push(holdArray);
-            }
-            res.status(200).render('grades', {
-                student_data: req.session.logged,
-                error: error_2,
-                majors_data: result,
-                info_error: req.query.error,
-                info_data: splitArray
-            });
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.get('/students/info', function (req, res) {
-    if (req.session.logged) {
-        var select = "SELECT s_m.semnumber FROM majors m\n                        JOIN students_majors s_m ON m.major_id = s_m.major_id\n                        JOIN students s ON s.student_id = s_m.student_id\n                        WHERE m.major_name = ? AND s.student_email = \"" + req.session.logged[6].value + "\"";
-        dbconnection_1.default.query(select, ["" + req.query.major], function (err, result) {
-            if (err) {
-                res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
-            }
-            else {
-                if (result[0].semnumber < req.query.semester) {
-                    res.status(404).redirect("/students/grades?error=" + encodeURIComponent('You have not reached that semester yet.'));
-                }
-                else {
-                    var select2 = "SELECT m.major_name, m_s.semnumber, s.subject_name, s.subject_type,\n                                     t.teacher_name, t.teacher_lastname, t.teacher_degree\n                                     FROM majors m, majors_subjects m_s, subjects s, teachers t, teachers_subjects t_s\n                                     WHERE m_s.major_id = m.major_id AND s.subject_id = m_s.subject_id\n                                     AND t.teacher_id = t_s.teacher_id AND s.subject_id = t_s.subject_id\n                                     AND m.major_name = ? AND m_s.semnumber = ?;\n                                     SELECT s_s.grade, su.subject_name FROM students_subjects s_s\n                                     JOIN students s ON s.student_id = s_s.student_id\n                                     JOIN subjects su ON su.subject_id = s_s.subject_id\n                                     WHERE s_s.semnumber = ? AND s.student_email=?";
-                    dbconnection_1.default.query(select2, ["" + req.query.major, req.query.semester, req.query.semester, "" + req.session.logged[6].value], function (err2, result2) {
-                        if (err2) {
-                            res.status(404).redirect("/students/grades?error=" + encodeURIComponent('There has been problem with the database occured, please try again later.'));
-                        }
-                        else {
-                            var data = '';
-                            if (result2[1].length > 0) {
-                                var _loop_1 = function (i) {
-                                    var subject = result2[1].find(function (subject) { return subject.subject_name === result2[0][i].subject_name; });
-                                    var grade = void 0;
-                                    if (typeof subject === "undefined") {
-                                        grade = "Not assigned";
-                                    }
-                                    else {
-                                        grade = subject.grade;
-                                    }
-                                    result2[0][i] = __assign(__assign({}, result2[0][i]), { grade: grade });
-                                };
-                                for (var i = 0; i < result2[0].length; i++) {
-                                    _loop_1(i);
-                                }
-                            }
-                            else {
-                                for (var i = 0; i < result2[0].length; i++) {
-                                    result2[0][i] = __assign(__assign({}, result2[0][i]), { grade: "Not assigned" });
-                                }
-                            }
-                            for (var _i = 0, _a = result2[0]; _i < _a.length; _i++) {
-                                var obj = _a[_i];
-                                for (var key in obj) {
-                                    data += "data=" + encodeURIComponent(obj[key]) + "&";
-                                }
-                            }
-                            res.status(200).redirect("/students/grades?" + data);
-                        }
-                    });
-                }
-            }
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.get('/students/settings', function (req, res) {
-    if (req.session.logged) {
-        res.status(200).render('settings', {
-            student_data: req.session.logged,
-            error: req.query.error,
-            success: req.query.success
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.post('/students/alteration', function (req, res) {
-    if (req.session.logged) {
-        var select = "SELECT student_password FROM students WHERE student_email = ?";
-        dbconnection_1.default.query(select, ["" + req.session.logged[6].value], function (err, result) { return __awaiter(void 0, void 0, void 0, function () {
-            var match, hash, update, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 6, , 7]);
-                        if (!err) return [3 /*break*/, 1];
-                        throw 'There has been problem with the database occured, please try again later.';
-                    case 1: return [4 /*yield*/, bcryptjs_1.default.compare(req.body.password, result[0].student_password)];
-                    case 2:
-                        match = _a.sent();
-                        if (!!match) return [3 /*break*/, 3];
-                        throw 'You have entered incorrect current password';
-                    case 3: return [4 /*yield*/, bcryptjs_1.default.hash(req.body.newpassword, 10)];
-                    case 4:
-                        hash = _a.sent();
-                        req.body.newpassword = hash;
-                        update = "UPDATE students SET student_password = ?\n                                        WHERE student_email = \"" + req.session.logged[6].value + "\"";
-                        dbconnection_1.default.query(update, ["" + req.body.newpassword], function (err2) {
-                            if (err2) {
-                                throw 'There has been problem with the database occured, please try again later.';
-                            }
-                            else {
-                                res.status(201).redirect("/students/settings?success=" + encodeURIComponent('Password has been successfully updated'));
-                            }
-                        });
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
-                        e_2 = _a.sent();
-                        if (typeof e_2 === null || typeof e_2 === "undefined") {
-                            e_2 = 'We weren\'t able to encrypt your password. Please try again later.';
-                        }
-                        res.status(404).redirect("/students/settings?error=" + encodeURIComponent(e_2));
-                        return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
-                }
-            });
-        }); });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.get('/students/logout', function (req, res) {
-    if (req.session.logged) {
-        req.session.destroy();
-        res.status(200).redirect('/students/signin');
-    }
-    else {
-        res.status(401).redirect('/students/signin');
-    }
-});
-server.post('/students/removal', function (req, res) {
-    if (req.session.logged) {
-        var update = "UPDATE students SET student_accepted=\"NO\" WHERE student_email=\"" + req.body.deleted + "\"";
-        dbconnection_1.default.query(update, function (err) {
-            if (err) {
-                res.status(404).redirect("/students/settings?error=" + encodeURIComponent("Unable to delete your account. Please try again later."));
-            }
-            else {
-                req.session.destroy();
-                res.status(201).redirect("/students/signin?success=" + encodeURIComponent('Your account has been successfully deleted'));
-            }
-        });
-    }
-    else {
-        res.status(401).redirect('/students/signin');
     }
 });
 server.get('*', function (req, res) {
