@@ -6,7 +6,8 @@ module.exports = {
         "index": "./frontend/public/src/index.ts",
         "students": "./frontend/public/src/students.ts",
         "signup": "./frontend/public/src/signup.ts",
-        "settings": "./frontend/public/src/settings.ts"
+        "settings": "./frontend/public/src/settings.ts",
+        "contact": "./frontend/public/src/contact.ts"
     },  
     output: {
         filename: "[name].js",

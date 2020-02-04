@@ -56,9 +56,20 @@ const sendRejectionMessage = (email: string, name: string) => {
     mail.send(message);
 };
 
+const sendContactMessage = (email: string, msg: string) => {
+    const message: MSG = {
+        to: 'teodor.tkaczyk98@gmail.com',
+        from: email,
+        subject: 'Contact message',
+        html: `<p>${msg}</p>`
+    };
+    mail.send(message);
+}
+
 export default {
     sendWelcomeMessage,
     sendDecisionMessage,
     sendAcceptionMessage,
-    sendRejectionMessage
+    sendRejectionMessage,
+    sendContactMessage
 };

@@ -17,6 +17,7 @@ var students_panel_1 = __importDefault(require("./routes/students_panel"));
 var students_grades_1 = __importDefault(require("./routes/students_grades"));
 var students_settings_1 = __importDefault(require("./routes/students_settings"));
 var students_logout_1 = __importDefault(require("./routes/students_logout"));
+var contact_1 = __importDefault(require("./routes/contact"));
 var server = express_1.default();
 var port = process.env.PORT;
 var errorMessage = null;
@@ -52,6 +53,7 @@ server.use(students_panel_1.default);
 server.use(students_grades_1.default);
 server.use(students_settings_1.default);
 server.use(students_logout_1.default);
+server.use(contact_1.default);
 server.get('', function (req, res) {
     res.status(200).render('index', {
         errorMessage: errorMessage,

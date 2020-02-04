@@ -41,9 +41,19 @@ var sendRejectionMessage = function (email, name) {
     };
     mail_1.default.send(message);
 };
+var sendContactMessage = function (email, msg) {
+    var message = {
+        to: 'teodor.tkaczyk98@gmail.com',
+        from: email,
+        subject: 'Contact message',
+        html: "<p>" + msg + "</p>"
+    };
+    mail_1.default.send(message);
+};
 exports.default = {
     sendWelcomeMessage: sendWelcomeMessage,
     sendDecisionMessage: sendDecisionMessage,
     sendAcceptionMessage: sendAcceptionMessage,
-    sendRejectionMessage: sendRejectionMessage
+    sendRejectionMessage: sendRejectionMessage,
+    sendContactMessage: sendContactMessage
 };

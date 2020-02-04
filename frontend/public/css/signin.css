@@ -333,6 +333,14 @@
   content: "Sign in";
 }
 
+.signup__form--message {
+  width: 40%;
+}
+
+.signup__btn--message:hover::after {
+  content: "Send";
+}
+
 @media (max-width: 800px) {
   .signup__form, .signup__div {
     width: 100%;

@@ -13,6 +13,7 @@ import students_panel_route from './routes/students_panel';
 import students_grades_route from './routes/students_grades';
 import students_settings_route from './routes/students_settings';
 import students_logout_route from './routes/students_logout';
+import contact_route from './routes/contact';
 
 const server: express.Application = express();
 const port = process.env.PORT;
@@ -50,6 +51,7 @@ server.use(students_panel_route);
 server.use(students_grades_route);
 server.use(students_settings_route);
 server.use(students_logout_route);
+server.use(contact_route);
 
 server.get('', (req, res) => {
     res.status(200).render('index', {
