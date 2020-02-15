@@ -314,9 +314,13 @@ body {
   align-items: center;
 }
 
+.panelData__tableC {
+  overflow-x: auto;
+  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
+}
+
 .panelData__table {
   border-radius: 0.2vh;
-  box-shadow: 0 0 0.5vw 0 rgba(24, 23, 23, 0.753);
   border-spacing: 2vw 3vh;
 }
 
@@ -510,6 +514,10 @@ body {
 @media (max-width: 1000px) {
   .panelData {
     padding: 1vh;
+  }
+
+  .panelData__tableC {
+    width: 100%;
   }
 
   .panelData__table {
