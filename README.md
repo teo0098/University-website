@@ -8,6 +8,7 @@
   <li>SCSS</li>
   <li>Express</li>
   <li>TypeScript</li>
+  <li>JavaScript</li>
   <li>Webpack</li>
   <li>SendGrid</li>
 </ul>
