@@ -83,7 +83,7 @@
   color: #b3b3b3;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .menu {
     flex-direction: column;
     padding: 0;
@@ -288,7 +288,7 @@
   color: #32CD32;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .signup__form, .signup__data {
     width: 100%;
   }
@@ -341,7 +341,7 @@
   content: "Send";
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .signup__form, .signup__div {
     width: 100%;
   }

@@ -23,3 +23,5 @@ const validData: Array<Obj> = [
 validation.checkValidation('#password', '.signup__password', validation.passwordPattern, validData[0]);
 validation.repeatPassword(1, validData);
 validation.submitButton(validData, '.panelData__btn--change');
+
+setResponsive();

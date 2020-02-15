@@ -76,7 +76,7 @@
   color: #b3b3b3;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .menu {
     flex-direction: column;
     padding: 0;

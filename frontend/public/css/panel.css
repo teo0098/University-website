@@ -83,7 +83,7 @@
   color: #b3b3b3;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .menu {
     flex-direction: column;
     padding: 0;
@@ -182,7 +182,7 @@
   border-radius: 0.5vh;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .menu {
     background: #3f173f;
   }
@@ -258,6 +258,7 @@ body {
 
 .panel__ul {
   position: absolute;
+  z-index: 1000;
   list-style-type: none;
   background: #0e0e0e;
   padding: 2vh;
@@ -504,6 +505,112 @@ body {
   text-align: center;
   color: #32CD32;
   font-size: 2vw;
+}
+
+@media (max-width: 1000px) {
+  .panelData {
+    padding: 1vh;
+  }
+
+  .panelData__table {
+    width: 100%;
+  }
+
+  .panelData__col {
+    font-size: 3vw;
+  }
+
+  .panelData__errorIcon {
+    font-size: 10vw;
+  }
+
+  .panelData__selection {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .panelData__select {
+    width: 100%;
+    padding: 2vh;
+  }
+
+  .panelData__btn {
+    width: 100%;
+    margin-top: 2vh;
+    font-size: 4vw;
+  }
+
+  .panelData__error {
+    font-size: 4vw;
+  }
+
+  .panelData__div {
+    width: 100%;
+    padding: 2vh;
+  }
+
+  .panelData__icon, .panelData__h3 {
+    font-size: 3vw;
+  }
+
+  .signup__div {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .signup__data {
+    width: 100%;
+  }
+
+  .panel {
+    flex-direction: column;
+  }
+
+  .panel__studentIcon {
+    font-size: 3vw;
+  }
+
+  .panel__outIcon {
+    font-size: 3vw;
+  }
+
+  .panel__arrowIcon {
+    font-size: 5vw;
+  }
+
+  .panel__wrapper--student {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .panel__wrapper--student:hover .panel__arrowIcon {
+    transform: rotateX(180deg);
+  }
+
+  .panel__wrapper--student:hover .panel__ul {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .panel__submenu {
+    position: static;
+  }
+
+  .panel__ul {
+    left: 5%;
+    right: 5%;
+  }
+
+  .panel__span {
+    font-size: 3vw;
+  }
+
+  .panel__menuIcon {
+    font-size: 4vw;
+  }
 }
 
 /*# sourceMappingURL=panel.css.map */
