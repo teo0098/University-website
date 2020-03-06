@@ -14,6 +14,7 @@
   <li>JavaScript</li>
   <li>Webpack</li>
   <li>SendGrid</li>
+  <li>Bcrypt</li>
 </ul>
 <hr>
 <a href="https://teo-university-app.herokuapp.com/" target="_blank">Project's preview</a>
